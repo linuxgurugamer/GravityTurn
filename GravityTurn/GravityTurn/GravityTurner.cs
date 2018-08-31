@@ -649,7 +649,7 @@ namespace GravityTurn
                     if (vesselState.altitudeBottom > vesselState.vesselHeight)
                         attitude.attitudeTo(Quaternion.Euler(-90, LaunchHeading(vessel), 0) * RollRotation(), AttitudeReference.SURFACE_NORTH, this);
                     else
-                        attitude.attitudeTo(Quaternion.Euler(-90, 0, 0), AttitudeReference.SURFACE_NORTH, this);
+                        attitude.attitudeTo(Quaternion.Euler(-90, 0, vesselState.vesselHeading), AttitudeReference.SURFACE_NORTH, this);
                 }
                 else if (program == AscentProgram.InLaunch || program == AscentProgram.InInitialPitch)
                 {
