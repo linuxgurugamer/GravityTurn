@@ -812,7 +812,7 @@ namespace GravityTurn
             pureLift = pureLiftV.magnitude;
 
             // using the force calculated by the FARAPI class if FAR is installed
-            if (FAR !== null)
+            if (FAR != null)
             {
                 try
                 {
