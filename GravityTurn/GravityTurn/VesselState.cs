@@ -8,6 +8,7 @@ namespace GravityTurn
     public class VesselState
     {
         public static bool isLoadedProceduralFairing = false;
+        public static bool isLoadedFAR = false; // initializing variable
 
         private static bool isLoadedRCSFXExt = false;
 
@@ -38,6 +39,8 @@ namespace GravityTurn
 
         public Vector3d angularVelocity;
         public Vector3d angularMomentum;
+        
+        public Vector3d force;
 
         public Vector3d radialPlus;   //unit vector in the plane of up and velocityVesselOrbit and perpendicular to velocityVesselOrbit
         public Vector3d radialPlusSurface; //unit vector in the plane of up and velocityVesselSurface and perpendicular to velocityVesselSurface
@@ -238,6 +241,27 @@ namespace GravityTurn
             isLoadedRCSFXExt = false;// (AssemblyLoader.loadedAssemblies.SingleOrDefault(a => a.assembly.GetName().Name == "MechJebRCSFXExt") != null);
             isLoadedProceduralFairing = isAssemblyLoaded("ProceduralFairings");
         }
+        
+        AssemblyLoader.LoadedAssembly FAR = AssemblyLoader.loadedAssemblies.SingleOrDefault(a => a.dllName == "FerramAerospaceResearch");
+            if (FAR != null)
+            {
+                MethodInfo FAR_method = null;
+                try
+                {
+                    FAR_method = FAR.assembly.GetTypes().SingleOrDefault(t => t.Name == "FARAPI").GetMethod("CalculateVesselAeroForces",
+                                                                                                        BindingFlags.Public | BindingFlags.Static,
+                                                                                                        new Type[] { typeof(Vessel),
+                                                                                                                    typeof(Vector3).MakeByRefType(),
+                                                                                                                    typeof(Vector3).MakeByRefType(),
+                                                                                                                    typeof(Vector3),
+                                                                                                                    typeof(double) });﻿
+                }
+                catch (Exception e)
+                {
+                    UnityEngine.Debug.LogError("Error finding the method definition\n" + e.StackTrace);
+                }
+            }
+        
         static bool isAssemblyLoaded(string assemblyName)
         {
             foreach (AssemblyLoader.LoadedAssembly assembly in AssemblyLoader.loadedAssemblies)
@@ -787,8 +811,28 @@ namespace GravityTurn
 
             pureLift = pureLiftV.magnitude;
 
-
-            Vector3d force = pureDragV + pureLiftV;
+            // using the force calculated by the FARAPI class if FAR is installed
+            if (FAR !== null)
+            {
+                try
+                {
+                   var parameters_FAR = new object[] { FlightGlobals.ActiveVessel, force, new Vector3(), surfaceVelocity, altitudeASL};
+                   FAR_method.Invoke(null, parameters_FAR);
+                   force = (Vector3)parameters[1];
+                }
+                catch (Exception e)
+                {
+                    UnityEngine.Debug.LogError("Error invoking method\n" + e.StackTrace);
+                }
+                // the *1000 is there because FAR uses kiloNewtons
+                // the /mass is there because in this plugin it's really an ACCELERATION, not a force
+                force = force * 1000 / mass;
+            }
+            else
+            {
+                Vector3d force = pureDragV + pureLiftV;   
+            }
+            
             Vector3d liftDir = -Vector3d.Cross(vessel.transform.right, -surfaceVelocity.normalized);
 
             // Drag is the part (pureDrag + PureLift) applied opposite of the surface vel
