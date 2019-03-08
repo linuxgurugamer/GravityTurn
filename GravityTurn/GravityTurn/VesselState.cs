@@ -1,6 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace GravityTurn
@@ -240,28 +242,9 @@ namespace GravityTurn
             gimbalExtDict.Add(typeof(ModuleGimbal), stockGimbal);
             isLoadedRCSFXExt = false;// (AssemblyLoader.loadedAssemblies.SingleOrDefault(a => a.assembly.GetName().Name == "MechJebRCSFXExt") != null);
             isLoadedProceduralFairing = isAssemblyLoaded("ProceduralFairings");
+            isLoadedFAR = isAssemblyLoaded("FerramAerospaceResearch");
         }
-        
-        AssemblyLoader.LoadedAssembly FAR = AssemblyLoader.loadedAssemblies.SingleOrDefault(a => a.dllName == "FerramAerospaceResearch");
-            if (FAR != null)
-            {
-                MethodInfo FAR_method = null;
-                try
-                {
-                    FAR_method = FAR.assembly.GetTypes().SingleOrDefault(t => t.Name == "FARAPI").GetMethod("CalculateVesselAeroForces",
-                                                                                                        BindingFlags.Public | BindingFlags.Static,
-                                                                                                        new Type[] { typeof(Vessel),
-                                                                                                                    typeof(Vector3).MakeByRefType(),
-                                                                                                                    typeof(Vector3).MakeByRefType(),
-                                                                                                                    typeof(Vector3),
-                                                                                                                    typeof(double) });﻿
-                }
-                catch (Exception e)
-                {
-                    UnityEngine.Debug.LogError("Error finding the method definition\n" + e.StackTrace);
-                }
-            }
-        
+      
         static bool isAssemblyLoaded(string assemblyName)
         {
             foreach (AssemblyLoader.LoadedAssembly assembly in AssemblyLoader.loadedAssemblies)
@@ -812,13 +795,24 @@ namespace GravityTurn
             pureLift = pureLiftV.magnitude;
 
             // using the force calculated by the FARAPI class if FAR is installed
-            if (FAR != null)
+            if (isLoadedFAR == true)
             {
+                AssemblyLoader.LoadedAssembly﻿ FAR = AssemblyLoader.loadedAssemblies.SingleOrDefault(a => a.dllName == "FerramAerospaceResearch");
+                MethodInfo FAR_method = null;
                 try
+                {
+                    FAR_method = FAR.assembly.GetTypes().SingleOrDefault(t => t.Name == "FARAPI").GetMethod("CalculateVesselAeroForces",
+                                                                                                        BindingFlags.Public | BindingFlags.Static);
+                }
+                catch (Exception e)
+                {
+                    UnityEngine.Debug.LogError("Error finding the method definition\n" + e.StackTrace);
+                }
+            try
                 {
                    var parameters_FAR = new object[] { FlightGlobals.ActiveVessel, force, new Vector3(), surfaceVelocity, altitudeASL};
                    FAR_method.Invoke(null, parameters_FAR);
-                   force = (Vector3)parameters[1];
+                   force = (Vector3)parameters_FAR[1];
                 }
                 catch (Exception e)
                 {
