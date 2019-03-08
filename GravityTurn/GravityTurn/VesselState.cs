@@ -11,7 +11,7 @@ namespace GravityTurn
     {
         public static bool isLoadedProceduralFairing = false;
         public static bool isLoadedFAR = false; // initializing variable
-
+        public static MethodInfo FAR_method = null;
         private static bool isLoadedRCSFXExt = false;
 
         private Vessel vesselRef = null;
@@ -243,6 +243,7 @@ namespace GravityTurn
             isLoadedRCSFXExt = false;// (AssemblyLoader.loadedAssemblies.SingleOrDefault(a => a.assembly.GetName().Name == "MechJebRCSFXExt") != null);
             isLoadedProceduralFairing = isAssemblyLoaded("ProceduralFairings");
             isLoadedFAR = isAssemblyLoaded("FerramAerospaceResearch");
+            FAR_method = getFAR_method();
         }
       
         static bool isAssemblyLoaded(string assemblyName)
@@ -263,6 +264,25 @@ namespace GravityTurn
             return false;
         }
 
+        static MethodInfo getFAR_method()
+        {
+            if (isLoadedFAR == true)
+            {
+                AssemblyLoader.LoadedAssembly﻿ FAR = AssemblyLoader.loadedAssemblies.SingleOrDefault(a => a.dllName == "FerramAerospaceResearch");
+                //try
+                //{
+                    return FAR.assembly.GetTypes().SingleOrDefault(t => t.Name == "FARAPI").GetMethod("CalculateVesselAeroForces", BindingFlags.Public | BindingFlags.Static);
+                //}
+                //catch (Exception e)
+                //{
+                //    UnityEngine.Debug.LogError("Error finding the method definition\n" + e.StackTrace);
+                //}
+            }
+            else
+            {
+                return null;
+            }
+        }
         public VesselState()
         {
             TerminalVelocityCall = TerminalVelocityStockKSP;
@@ -797,17 +817,6 @@ namespace GravityTurn
             // using the force calculated by the FARAPI class if FAR is installed
             if (isLoadedFAR == true)
             {
-                AssemblyLoader.LoadedAssembly﻿ FAR = AssemblyLoader.loadedAssemblies.SingleOrDefault(a => a.dllName == "FerramAerospaceResearch");
-                MethodInfo FAR_method = null;
-                try
-                {
-                    FAR_method = FAR.assembly.GetTypes().SingleOrDefault(t => t.Name == "FARAPI").GetMethod("CalculateVesselAeroForces",
-                                                                                                        BindingFlags.Public | BindingFlags.Static);
-                }
-                catch (Exception e)
-                {
-                    UnityEngine.Debug.LogError("Error finding the method definition\n" + e.StackTrace);
-                }
             try
                 {
                    var parameters_FAR = new object[] { FlightGlobals.ActiveVessel, force, new Vector3(), surfaceVelocity, altitudeASL};
