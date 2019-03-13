@@ -264,19 +264,20 @@ namespace GravityTurn
             return false;
         }
 
-        static MethodInfo getFAR_method()
+        public static MethodInfo getFAR_method()
         {
             if (isLoadedFAR == true)
             {
-                AssemblyLoader.LoadedAssembly﻿ FAR = AssemblyLoader.loadedAssemblies.SingleOrDefault(a => a.dllName == "FerramAerospaceResearch");
-                //try
-                //{
+                try
+                {
+                    AssemblyLoader.LoadedAssembly﻿ FAR = AssemblyLoader.loadedAssemblies.SingleOrDefault(a => a.dllName == "FerramAerospaceResearch");
                     return FAR.assembly.GetTypes().SingleOrDefault(t => t.Name == "FARAPI").GetMethod("CalculateVesselAeroForces", BindingFlags.Public | BindingFlags.Static);
-                //}
-                //catch (Exception e)
-                //{
-                //    UnityEngine.Debug.LogError("Error finding the method definition\n" + e.StackTrace);
-                //}
+                }
+                catch (Exception e)
+                {
+                    UnityEngine.Debug.LogError("Error finding the method definition\n" + e.StackTrace);
+                    return null;
+                }
             }
             else
             {
@@ -817,19 +818,19 @@ namespace GravityTurn
             // using the force calculated by the FARAPI class if FAR is installed
             if (isLoadedFAR == true)
             {
-            try
+                try
                 {
-                   var parameters_FAR = new object[] { FlightGlobals.ActiveVessel, force, new Vector3(), surfaceVelocity, altitudeASL};
-                   FAR_method.Invoke(null, parameters_FAR);
-                   force = (Vector3)parameters_FAR[1];
+                    var parameters_FAR = new object[] { FlightGlobals.ActiveVessel, new Vector3(), new Vector3(), (Vector3)surfaceVelocity, (double)altitudeASL };
+                    FAR_method.Invoke(null, parameters_FAR);
+                    force = (Vector3)parameters_FAR[1];
+                    
+                    // the /mass is there because in this plugin it's really an ACCELERATION, not a force
+                    force = force / mass;
                 }
                 catch (Exception e)
                 {
                     UnityEngine.Debug.LogError("Error invoking method\n" + e.StackTrace);
                 }
-                // the *1000 is there because FAR uses kiloNewtons
-                // the /mass is there because in this plugin it's really an ACCELERATION, not a force
-                force = force * 1000 / mass;
             }
             else
             {
