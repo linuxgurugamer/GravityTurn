@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.CompilerServices;
@@ -759,13 +759,15 @@ namespace GravityTurn
                 "GravityDrag:\t{1:0.00} m/s²\n" +
                 "Thrust Vector Drag:\t{5:0.00} m/s²\n" +
                 "Air Drag Loss:\t{2:0.00} m/s\n" +
-                "Gravity Drag Loss:\t{3:0.00} -> {4:0.00}m/s @AP\n\n" +
+                "Gravity Drag Loss:\t{3:0.00} -> {4:0.00} m/s @AP\n\n" +
                 "Total Vector Loss:\t{6:0.00} m/s\n" +
                 "Total Loss:\t{7:0.00} m/s\n" +
                 "Total Burn:\t\t{8:0.0}\n\n" +
                 "Apoapsis:\t\t{9}\n" +
                 "Periapsis:\t\t{10}\n" +
-                "Inclination:\t\t{11:0.0} °\n",
+                "Inclination:\t\t{11:0.0} °\n\n" +
+                "Dynamic Pressure:\t{12:0.00} Pa\n" +
+                "Max Q:\t\t{13:0.00} Pa\n\n",
                 vesselState.drag,
                 GravityDrag,
                 DragLoss,
@@ -776,7 +778,9 @@ namespace GravityTurn
                 TotalBurn,
                 OrbitExtensions.FormatOrbitInfo(vessel.orbit.ApA, vessel.orbit.timeToAp),
                 OrbitExtensions.FormatOrbitInfo(vessel.orbit.PeA, vessel.orbit.timeToPe),
-                vessel.orbit.inclination
+                vessel.orbit.inclination,
+                vesselState.dynamicPressure,
+                vesselState.maxQ
                 );
         }
 

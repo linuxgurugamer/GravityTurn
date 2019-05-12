@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -19,7 +19,7 @@ namespace GravityTurn.Window
             base.WindowGUI(windowID);
             
             GUILayout.BeginVertical();
-            GUILayout.Label(turner.Message, GUILayout.Width(300), GUILayout.Height(200));
+            GUILayout.Label(turner.Message, GUILayout.Width(300), GUILayout.Height(250));
             GUILayout.EndVertical();
             if (GameSettings.MODIFIER_KEY.GetKeyDown() && !GravityTurner.DebugShow)
             {

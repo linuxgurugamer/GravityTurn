@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 //using System.Threading.Tasks;
@@ -73,6 +73,12 @@ namespace GravityTurn
 
                 if (m is ModuleProceduralFairing)
                     isFairing = true;
+
+                if(isFairing)
+                {
+                    if (VesselState.isLoadedFAR && m.stagingEnabled && p.stagingOn) return true;
+                        break;
+                }
 
                 if (m is ModuleCargoBay && isFairing)
                 {
