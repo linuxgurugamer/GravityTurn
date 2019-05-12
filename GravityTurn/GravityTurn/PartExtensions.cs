@@ -77,14 +77,14 @@ namespace GravityTurn
                 if(isFairing)
                 {
                     if (VesselState.isLoadedFAR && m.stagingEnabled && p.stagingOn) return true;
-                        break;
-                }
 
-                if (m is ModuleCargoBay && isFairing)
-                {
-                    ModuleCargoBay fairing = m as ModuleCargoBay;
-                    if (fairing.ClosedAndLocked() && m.stagingEnabled && p.stagingOn) return true;
+                    else
+                    if (m is ModuleCargoBay)
+                    {
+                        ModuleCargoBay fairing = m as ModuleCargoBay;
+                        if (fairing.ClosedAndLocked() && m.stagingEnabled && p.stagingOn) return true;
                         break;
+                    }
                 }
 
                 if (VesselState.isLoadedProceduralFairing && m.moduleName == "ProceduralFairingDecoupler")
