@@ -834,7 +834,7 @@ namespace GravityTurn
             }
             else
             {
-                Vector3d force = pureDragV + pureLiftV;   
+                force = pureDragV + pureLiftV;   
             }
             
             Vector3d liftDir = -Vector3d.Cross(vessel.transform.right, -surfaceVelocity.normalized);
