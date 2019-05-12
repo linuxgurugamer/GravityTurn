@@ -291,7 +291,7 @@ namespace GravityTurn
                 return null;
             }
         }
-        
+
         static MethodInfo getFAR_method_press()
         {
             if (isLoadedFAR == true)
@@ -867,11 +867,11 @@ namespace GravityTurn
                 {
                     var parameters_FAR = new object[] { FlightGlobals.ActiveVessel, new Vector3(), new Vector3(), (Vector3)surfaceVelocity, (double)altitudeASL };
                     FAR_method_force.Invoke(null, parameters_FAR);
+
                     force = (Vector3)parameters_FAR[1];
                     
                     // the /mass is there because in this plugin it's really an ACCELERATION, not a force
                     force = force / mass;
-
                 }
                 catch (Exception e)
                 {
