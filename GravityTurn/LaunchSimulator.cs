@@ -10,7 +10,7 @@ namespace GravityTurn
     {
         FuelFlowSimulation.Stats[] stats;
         int CurrentStage;
-        double TimeStep = 0.2;
+        //double TimeStep = 0.2;
 
         public LaunchSimulator(FuelFlowSimulation.Stats[] inStats)
         {

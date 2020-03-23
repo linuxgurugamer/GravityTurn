@@ -4,6 +4,7 @@ using System.Text;
 using UnityEngine;
 using KSP.IO;
 using System.IO;
+using ClickThroughFix;
 
 namespace GravityTurn.Window
 {
@@ -112,7 +113,7 @@ namespace GravityTurn.Window
             {
                 GuiUtils.LoadSkin(GuiUtils.SkinType.Compact);
                 GUI.skin = GuiUtils.skin;
-                windowPos = GUILayout.Window(WindowID, windowPos, WindowGUI, WindowTitle, GUILayout.MinWidth(300));
+                windowPos = ClickThruBlocker.GUILayoutWindow(WindowID, windowPos, WindowGUI, WindowTitle, GUILayout.MinWidth(300));
             }
         }
 

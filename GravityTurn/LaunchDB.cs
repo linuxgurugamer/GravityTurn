@@ -14,19 +14,19 @@ namespace GravityTurn
         [Persistent]
         public double StartSpeed;
         [Persistent]
-        public double APTimeStart;
+        public double APTimeStart = 0;
         [Persistent]
-        public double APTimeFinish;
+        public double APTimeFinish = 0;
         [Persistent]
         public double TurnAngle;
         [Persistent]
-        public double Sensitivity;
+        public double Sensitivity = 0;
         [Persistent]
-        public double Roll;
+        public double Roll = 0;
         [Persistent]
         public double DestinationHeight;
         [Persistent]
-        public double PressureCutoff;
+        public double PressureCutoff = 0;
         [Persistent]
         public double TotalLoss;
         [Persistent]
@@ -342,7 +342,8 @@ namespace GravityTurn
             {
 
 #if DEBUG
-                return System.IO.Directory.GetCurrentDirectory() + @"\GameData\GravityTurn\Plugins\PluginData\GravityTurn\" + sub;
+                //return System.IO.Directory.GetCurrentDirectory() + @"/GameData/GravityTurn/Plugins/PluginData/GravityTurn/" + sub;
+                return System.IO.Directory.GetCurrentDirectory() + @"/GameData/GravityTurn/PluginData/" + sub;            
 #else
                 return IOUtils.GetFilePathFor(t, sub);
 #endif
@@ -351,11 +352,11 @@ namespace GravityTurn
             catch (Exception ex)
             {
                 GravityTurner.Log("Exception: {0}", ex.ToString());
-                return System.IO.Directory.GetCurrentDirectory() + @"\GameData\GravityTurn\Plugins\PluginData\GravityTurn\" + sub;
+                return System.IO.Directory.GetCurrentDirectory() + @"/GameData/GravityTurn/PluginData/" + sub;            }
+                //return System.IO.Directory.GetCurrentDirectory() + @"/GameData/GravityTurn/Plugins/PluginData/GravityTurn/ + sub;            }
             }
-        }
 
-    }
+        }
 
 
 }

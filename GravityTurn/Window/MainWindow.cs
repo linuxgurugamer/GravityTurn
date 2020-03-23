@@ -131,9 +131,11 @@ namespace GravityTurn.Window
         public override void WindowGUI(int windowID)
         {
             base.WindowGUI(windowID);
-            if (!WindowVisible && turner.button.enabled)
+            //if (!WindowVisible && turner.button.enabled)
+            if (!WindowVisible && turner.toolbarControl.enabled)
             {
-                turner.button.SetFalse(false);
+                //turner.button.SetFalse(false);
+                turner.toolbarControl.SetFalse(false);
                 turner.SaveParameters();
             }
             GUILayout.BeginVertical();

@@ -2,6 +2,8 @@
 using System.Text.RegularExpressions;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using ClickThroughFix;
+using ToolbarControl_NS;
 
 namespace GravityTurn.Window
 {
@@ -402,22 +404,26 @@ namespace GravityTurn.Window
             {
                 if (_lockImageOn == null)
                 {
-                    _lockImageOn = GameDatabase.Instance.GetTexture("GravityTurn/Textures/lock_on", false);
-                    if (_lockImageOn == null)
+                    //_lockImageOn = GameDatabase.Instance.GetTexture("GravityTurn/Textures/lock_on", false);
+                    // if (_lockImageOn == null)
+
+                    if (!ToolbarControl.LoadImageFromFile(ref _lockImageOn, "GravityTurn/PluginData/Textures/lock_on"))
                         GravityTurner.Log("could not load lock_on icon!");
                 }
                 return _lockImageOn;
             }
         }
-        static Texture2D _lockImageOff;
+        static Texture2D _lockImageOff = new Texture2D(2,2);
         public static Texture2D lockImageOff
         {
             get
             {
                 if (_lockImageOff == null)
                 {
-                    _lockImageOff = GameDatabase.Instance.GetTexture("GravityTurn/Textures/lock_off", false);
-                    if (_lockImageOff == null)
+                    //_lockImageOff = GameDatabase.Instance.GetTexture("GravityTurn/Textures/lock_off", false);
+                    //if (_lockImageOff == null)
+
+                    if (!ToolbarControl.LoadImageFromFile(ref _lockImageOn, "GravityTurn/PluginData/Textures/lock_off"))
                         GravityTurner.Log("could not load lock_off icon!");
                 }
                 return _lockImageOff;
@@ -433,15 +439,17 @@ namespace GravityTurn.Window
                 value ? lockToggleOn : lockToggleOff, 
                 GUILayout.ExpandWidth(false), GUILayout.MinWidth(18), GUILayout.MinHeight(21));
         }
-        static Texture2D _saveIcon;
+        static Texture2D _saveIcon = new Texture2D(2, 2);
         public static Texture2D saveIcon
         {
             get
             {
                 if (_saveIcon == null)
                 {
-                    _saveIcon = GameDatabase.Instance.GetTexture("GravityTurn/Textures/save", false);
-                    if (_saveIcon == null)
+                    //_saveIcon = GameDatabase.Instance.GetTexture("GravityTurn/Textures/save", false);
+                    //if (_saveIcon == null)
+
+                    if (!ToolbarControl.LoadImageFromFile(ref _lockImageOn, "GravityTurn/PluginData/Textures/save"))
                         GravityTurner.Log("could not load save icon!");
                 }
                 return _saveIcon;
@@ -477,6 +485,7 @@ namespace GravityTurn.Window
             GUI.skin = null;
             compactSkin = Object.Instantiate(GUI.skin);
 
+            if (GuiUtils.skin == null) GuiUtils.skin = GuiUtils.defaultSkin;
             GuiUtils.skin.name = "KSP Compact";
 
             compactSkin.label.margin = new RectOffset(1, 1, 1, 1);
@@ -764,8 +773,8 @@ namespace GravityTurn.Window
                 // Make sure the rectangle is fully on screen
                 rect.x = Math.Max(0, Math.Min(rect.x, scaledScreenWidth - rect.width));
                 rect.y = Math.Max(0, Math.Min(rect.y, scaledScreenHeight - rect.height));
-
-                rect = GUILayout.Window(id, rect, identifier =>
+                
+                rect = ClickThruBlocker.GUILayoutWindow(id, rect, identifier =>
                 {
                     selectedItem = GUILayout.SelectionGrid(-1, entries, 1, yellowOnHover);
                     if (GUI.changed)

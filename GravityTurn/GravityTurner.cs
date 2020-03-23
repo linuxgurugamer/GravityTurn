@@ -9,9 +9,19 @@ using System.Diagnostics;
 using KSP.UI.Screens;
 using KramaxReloadExtensions;
 using KSP.UI.Screens.Flight;
+using ToolbarControl_NS;
 
 namespace GravityTurn
 {
+    [KSPAddon(KSPAddon.Startup.MainMenu, false)]
+    public class RegisterToolbar : MonoBehaviour
+    {
+        void Start()
+        {
+            ToolbarControl.RegisterMod(GravityTurner.MODID, GravityTurner.MODNAME);
+        }
+    }
+
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public class GravityTurner : ReloadableMonoBehaviour
     {
@@ -88,7 +98,9 @@ namespace GravityTurn
 
         #region Window Stuff
 
-        public ApplicationLauncherButton button;
+        //public ApplicationLauncherButton button;
+        internal ToolbarControl toolbarControl;
+
         Window.MainWindow mainWindow = null;
         public Window.WindowManager windowManager = new Window.WindowManager();
         public Window.FlightMapWindow flightMapWindow;
@@ -258,8 +270,11 @@ namespace GravityTurn
             flightMapWindow.WindowVisible = openFlightmap;
         }
 
+        internal const string MODID = "GravityTurn_NS";
+        internal const string MODNAME = "GravityTurn";
         private void CreateButtonIcon()
         {
+#if false
             button = ApplicationLauncher.Instance.AddModApplication(
                 SetWindowOpen,
                 () => mainWindow.WindowVisible = false,
@@ -270,6 +285,18 @@ namespace GravityTurn
                 ApplicationLauncher.AppScenes.ALWAYS,
                 GameDatabase.Instance.GetTexture("GravityTurn/Textures/icon", false)
                 );
+#endif
+            Log("CreateButtonIcon");
+            toolbarControl = gameObject.AddComponent<ToolbarControl>();
+            toolbarControl.AddToAllToolbars(SetWindowOpen,
+                () => mainWindow.WindowVisible = false,
+                ApplicationLauncher.AppScenes.FLIGHT | ApplicationLauncher.AppScenes.MAPVIEW | ApplicationLauncher.AppScenes.TRACKSTATION,
+                MODID,
+                "gravityTurnButton",
+                "GravityTurn/Textures/PluginData/icon_38",
+                "GravityTurn/Textures/PluginData/icon_24",
+                MODNAME
+            );
         }
 
 
@@ -617,7 +644,8 @@ namespace GravityTurn
                     mucore.CircularizeAtAP();
                 }
 
-                button.SetFalse();
+                //button.SetFalse();
+                toolbarControl.SetFalse();
             }
             else
             {
@@ -848,9 +876,13 @@ namespace GravityTurn
                 Log(ex.ToString());
             }
             DebugShow = false;
-            windowManager.OnDestroy();
-            ApplicationLauncher.Instance.RemoveModApplication(button);
+            //windowManager.OnDestroy();
+            //ApplicationLauncher.Instance.RemoveModApplication(button);
+            if (toolbarControl != null)
+            {
+                toolbarControl.OnDestroy();
+                Destroy(toolbarControl);
+            }
         }
-
     }
 }

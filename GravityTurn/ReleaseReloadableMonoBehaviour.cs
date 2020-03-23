@@ -27,7 +27,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 // It disables the special stuff to make your plugin "reloadable".
 // It should be copied into your project itself so your released mode
 // has no requirement for the plugin reload extension.
-#if !DEBUG
+
+//#if !DEBUG
+#if true
 using System;
 using System.Collections.Generic;
 using System.Text;
