@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GravityTurn</RootNamespace>
     <AssemblyName>GravityTurn</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <KSP_Dir>$(MSBuildStartupDirectory)/../Kerbal Space Program</KSP_Dir>
@@ -35,33 +35,20 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>$(KSP_Dir)/KSP_Data/Managed/Assembly-CSharp.dll</HintPath>
+    <Reference Include="$(KSPDIR)\KSP_x64_Data\Managed\Assembly*.dll">
       <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>$(KSP_Dir)/KSP_Data/Managed/Assembly-CSharp-firstpass.dll</HintPath>
+    <Reference Include="$(KSPDIR)\KSP_x64_Data\Managed\UnityEngine*.dll">
       <Private>False</Private>
-    </Reference>
-    <Reference Condition="'$(Configuration)' == 'Debug'" Include="KramaxReloadExtensions">
-      <HintPath>$(KSP_Dir)/GameData/KramaxPluginReload/Plugins/KramaxReloadExtensions.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="KSPAssets">
-      <HintPath>$(KSP_Dir)/KSP_Data/Managed/KSPAssets.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="UnityEngine">
-      <HintPath>$(KSP_Dir)/KSP_Data/Managed/UnityEngine.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(KSP_Dir)/KSP_Data/Managed/UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyVersion.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AssemblyVersion.tt</DependentUpon>
+    </Compile>
     <Compile Include="AtmoVisualizer.cs" />
     <Compile Include="AttitudeController.cs" />
     <Compile Include="Calculations.cs" />
@@ -69,6 +56,7 @@
     <Compile Include="FlightMap.cs" />
     <Compile Include="FuelFlowSimulation.cs" />
     <Compile Include="GravityTurner.cs" />
+    <Compile Include="InstallChecker.cs" />
     <Compile Include="LaunchDB.cs" />
     <Compile Include="LaunchSimulator.cs" />
     <Compile Include="MathExtensions.cs" />
@@ -95,9 +83,46 @@
     <Compile Include="Window\StatsWindow.cs" />
     <Compile Include="Window\WindowManager.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="AssemblyVersion.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AssemblyVersion.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-      <OutputDir>$(SolutionDir)\..\GameData\GravityTurn</OutputDir>
+    <OutputDir>$(SolutionDir)\..\GameData\GravityTurn</OutputDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>	"$(DevEnvDir)\texttransform.exe" "$(ProjectDir)AssemblyVersion.tt"</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+set KSPDIR=$(KSPDIR)
+
+IF "%25KSPDIR%25"=="" (
+
+	ECHO Configuration error - KSPDIR not specified in project.
+
+	ECHO Either set KSPDIR environment variable or edit BetterLoadSaveGame.Common.props
+
+	PAUSE
+
+	GOTO DONE
+
+)
+
+start /D $(SolutionDir) /WAIT deploy.bat  $(TargetDir) $(TargetFileName)
+
+if $(ConfigurationName) == Release (	
+
+	start /D $(SolutionDir) /WAIT buildRelease.bat $(TargetDir) $(TargetFileName)
+
+)
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -107,8 +132,8 @@
   </Target>
   -->
   <Target Name="AfterBuild">
-    <MakeDir Directories="$(OutputDir)\Plugins\"/>
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(OutputDir)\Plugins\"/>
-    <Copy SourceFiles="$(SolutionDir)\..\LICENSE" DestinationFolder="$(OutputDir)"/>
+    <MakeDir Directories="$(OutputDir)\Plugins\" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(OutputDir)\Plugins\" />
+    <Copy SourceFiles="$(SolutionDir)\..\LICENSE" DestinationFolder="$(OutputDir)" />
   </Target>
 </Project>
