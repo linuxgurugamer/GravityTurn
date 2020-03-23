@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using KSP.UI.Screens;
@@ -46,10 +46,19 @@ namespace GravityTurn
             if (!topFairingDeployed)
             {
                 Part fairing = GetTopmostFairing(vessel);
+
                 if (fairing == null)
-                    GravityTurner.DebugMessage += "  no top fairing\n";
-                
-                if (fairing != null && fairing.IsUnfiredDecoupler() && (vesselState.dynamicPressure < turner.FairingPressure && Math.Abs(vesselState.dynamicPressure - vesselState.maxQ) > 0.1) && (vesselState.maxQ > vessel.mainBody.atmospherePressureSeaLevel/2))
+                    GravityTurner.DebugMessage += "  No top fairing\n";
+
+                if (fairing != null)
+                    GravityTurner.DebugMessage += "  Has top fairing\n";
+
+                bool fairingReadyToDeploy = (vesselState.dynamicPressure < turner.FairingPressure && Math.Abs(vesselState.dynamicPressure - vesselState.maxQ) > 0.1) && ((VesselState.isLoadedFAR && (vesselState.maxQ > vessel.mainBody.GetPressure(0) * 1000 / 5)) || (vesselState.maxQ > vessel.mainBody.atmospherePressureSeaLevel / 2));
+
+                if (fairingReadyToDeploy)
+                    GravityTurner.DebugMessage += "  Fairing ready to be deployed\n";
+
+                if (fairing != null && fairing.IsUnfiredDecoupler() && fairingReadyToDeploy)
                 {
                     topFairingDeployed = true;
                     fairing.DeployFairing();

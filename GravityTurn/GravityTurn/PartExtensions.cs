@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 //using System.Threading.Tasks;
@@ -74,11 +74,17 @@ namespace GravityTurn
                 if (m is ModuleProceduralFairing)
                     isFairing = true;
 
-                if (m is ModuleCargoBay && isFairing)
+                if(isFairing)
                 {
-                    ModuleCargoBay fairing = m as ModuleCargoBay;
-                    if (fairing.ClosedAndLocked() && m.stagingEnabled && p.stagingOn) return true;
+                    if (VesselState.isLoadedFAR && m.stagingEnabled && p.stagingOn) return true;
+
+                    else
+                    if (m is ModuleCargoBay)
+                    {
+                        ModuleCargoBay fairing = m as ModuleCargoBay;
+                        if (fairing.ClosedAndLocked() && m.stagingEnabled && p.stagingOn) return true;
                         break;
+                    }
                 }
 
                 if (VesselState.isLoadedProceduralFairing && m.moduleName == "ProceduralFairingDecoupler")
