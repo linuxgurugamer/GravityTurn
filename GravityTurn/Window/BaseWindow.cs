@@ -51,6 +51,9 @@ namespace GravityTurn.Window
         public bool WindowVisible = false; 
         public string WindowTitle = "GravityTurn";
         string filename;
+#if false
+        WindowPositions.WindowType winType;
+#endif
         public static bool ShowGUI = true;
 
         [Persistent]
@@ -67,8 +70,29 @@ namespace GravityTurn.Window
             this.turner = turner;
             turner.windowManager.Register(this);
             WindowID = inWindowID;
+#if false
+            switch (inWindowID)
+            {
+                case 6378070 + 4:   // StatsWindow
+                    winType = WindowPositions.WindowType.StatsWindow;
+                    break;
+                case 6378070 + 2:   // StageSettings
+                    winType = WindowPositions.WindowType.StageSettings;
+                    break;
+                case 6378070 + 0:   // MainWindoiw
+                    winType = WindowPositions.WindowType.MainWindow;
+                    break;
+                case 6378070 + 1:   // HelpWindow
+                    winType = WindowPositions.WindowType.HelpWindow;
+                    break;
+                case 548302 + 0:    // FlightMapWindow
+                    winType = WindowPositions.WindowType.FlightMapWindow;
+                    break;
+            }
+#endif
             filename = LaunchDB.GetBaseFilePath(turner.GetType(), string.Format("gt_window_{0}.cfg", WindowID));
             Load();
+
             if (windowPos.left + windowPos.width > Screen.width)
             {
                 windowPos.left = Screen.width - windowPos.width;
@@ -79,6 +103,22 @@ namespace GravityTurn.Window
             }
             if (windowPos.top < 0)
                 windowPos.top = 0;
+
+#if false
+            WindowPositions.Load(
+                LaunchDB.GetBaseFilePath(turner.GetType(), ""),
+                winType, out Rect winPos);
+
+            if (winPos.x != windowPos.left)
+                Debug.Log("X not equal");
+            if (winPos.y != Screen.height - windowPos.top)
+                Debug.Log("Y not equal");
+            if (winPos.width != windowPos.width)
+                Debug.Log("WIDTH not equal");
+            if (winPos.height != windowPos.height)
+                Debug.Log("HEIGHT not equal");
+
+#endif
         }
 
         public void Load()
@@ -105,7 +145,7 @@ namespace GravityTurn.Window
             {
                 WindowVisible = false;
             }
-            GUI.DragWindow(new Rect(0, 0, 10000, 20));
+            GUI.DragWindow();
         }
         public void drawGUI()
         {
@@ -127,6 +167,14 @@ namespace GravityTurn.Window
             Directory.CreateDirectory(Path.GetDirectoryName(filename));
             ConfigNode root = ConfigNode.CreateConfigFromObject(this);
             root.Save(filename);
+#if false
+            Rect r = new Rect();
+            r.x = windowPos.left;
+            r.y = Screen.height - windowPos.top;
+            r.width = windowPos.width;
+            r.height = windowPos. height;
+            WindowPositions.Save(Path.GetDirectoryName(filename), winType, r);
+#endif
         }
     }
 }

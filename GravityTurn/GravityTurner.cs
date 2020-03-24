@@ -293,8 +293,8 @@ namespace GravityTurn
                 ApplicationLauncher.AppScenes.FLIGHT | ApplicationLauncher.AppScenes.MAPVIEW | ApplicationLauncher.AppScenes.TRACKSTATION,
                 MODID,
                 "gravityTurnButton",
-                "GravityTurn/Textures/PluginData/icon_38",
-                "GravityTurn/Textures/PluginData/icon_24",
+                "GravityTurn/PluginData/Textures/icon_38",
+                "GravityTurn/PluginData/Textures/icon_24",
                 MODNAME
             );
         }
@@ -405,7 +405,7 @@ namespace GravityTurn
         private void DebugGUI(int windowID)
         {
             GUILayout.Box(PreflightInfo(getVessel));
-            GUI.DragWindow(new Rect(0, 0, 10000, 2000));
+            GUI.DragWindow();
         }
 
         public void Launch()

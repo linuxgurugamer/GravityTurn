@@ -80,6 +80,7 @@
     <Compile Include="Vector6.cs" />
     <Compile Include="VesselExtensions.cs" />
     <Compile Include="VesselState.cs" />
+    <Compile Include="WindowPositions.cs" />
     <Compile Include="Window\BaseWindow.cs" />
     <Compile Include="Window\FlightMapWindow.cs" />
     <Compile Include="Window\GuiUtils.cs" />

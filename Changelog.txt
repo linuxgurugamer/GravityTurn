@@ -1,7 +1,12 @@
 Changelog
 
+1.8.0.1
+	Fixed missing textures for toolbar buttons
+	Changed to allow window dragging from anywhere in the window
+	Started work on consolidating all window positions into a single file (currently disabled)
+
 1.8.0
-	Merged in FAR compatibility chagnes by @ildifa
+	Merged in FAR compatibility changes by @ildifa
 	Adoption by Linuxgurugamer
 	Reorganized directories slightly
 	Added Changelog.txt, deploy.bat, GravityTurn.version, deploy.bat, buildRelease.bat, AssemblyVersion.tt
@@ -10,7 +15,7 @@ Changelog
 	Fixed nullref in CopyCompactSkin due to uninitialized skin
 	Changed backslashes to forward slashes for the stored config files (needed for OSX/Linux)
 	FOLLOWING CHANGE INCOMPATIBLE WITH PREVIOUS VERSIONS
-		Moved storage directory from GravityTurn/Plugins/PluginData/GravityTurn/" + sub to "/GameData/GravityTurn/PluginData/" + sub
+		Moved storage directory from GravityTurn/Plugins/PluginData/GravityTurn/" + sub to "GameData/GravityTurn/PluginData/" + sub
 
 
 1.7.7
