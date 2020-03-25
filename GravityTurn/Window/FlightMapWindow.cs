@@ -29,6 +29,7 @@ namespace GravityTurn.Window
             GUI.Label(new Rect(windowPos.width - 80, windowPos.height / 2 - 40, 80, 20), "Altitude", mySty);
             GUIUtility.RotateAroundPivot(90, pivotPoint);
             GUI.Label(new Rect(windowPos.width / 2 - 80, windowPos.height - 25, 160, 20), "Horizontal Distance", mySty);
+            GUI.DragWindow();
         }
     }
 }

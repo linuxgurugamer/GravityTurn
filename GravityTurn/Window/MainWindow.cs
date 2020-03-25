@@ -199,6 +199,7 @@ namespace GravityTurn.Window
             // while landed, show launch button
             if (GravityTurner.getVessel.Landed && !turner.Launching && GUILayout.Button("Launch!", GUILayout.ExpandWidth(true), GUILayout.MinHeight(30)))
             {
+                Debug.Log("Launch button pressed again");
                 turner.Launch();
             }
             // while launching, show launch button
@@ -227,6 +228,7 @@ namespace GravityTurn.Window
                 windowPos.height = minHeight;
                 Save();
             }
+            GUI.DragWindow();
         }
     }
 }

@@ -13,11 +13,13 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using KramaxReloadExtensions;
+
 
 namespace GravityTurn
 {
     [KSPAddon(KSPAddon.Startup.Instantly, true)]
-    internal class Startup : MonoBehaviour
+    public class Startup : ReloadableMonoBehaviour
     {
         private void Start()
         {

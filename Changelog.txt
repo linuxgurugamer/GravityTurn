@@ -1,5 +1,15 @@
 Changelog
 
+1.8.0.3
+	Fixed total unresponsiveness of mod 
+
+1.8.0.2
+	Updated .gitignore which was preventing the GameData from being updated
+
+1.8.0.1
+	Fixed missing textures for toolbar buttons
+	Changed to allow window dragging from anywhere in the window
+
 1.8.0
 	Merged in FAR compatibility chagnes by @ildifa
 	Adoption by Linuxgurugamer

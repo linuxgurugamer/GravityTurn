@@ -214,6 +214,7 @@ namespace GravityTurn.Window
         }
     }
 
+#if false
     public class ZombieGUILoader : MonoBehaviour
     {
         void OnGUI()
@@ -223,6 +224,7 @@ namespace GravityTurn.Window
             GameObject.Destroy(gameObject);
         }
     }
+#endif
 
     public static class GuiUtils
     {
@@ -397,7 +399,7 @@ namespace GravityTurn.Window
             }
         }
 
-        static Texture2D _lockImageOn;
+        static Texture2D _lockImageOn = null;
         public static Texture2D lockImageOn
         {
             get
@@ -406,14 +408,14 @@ namespace GravityTurn.Window
                 {
                     //_lockImageOn = GameDatabase.Instance.GetTexture("GravityTurn/Textures/lock_on", false);
                     // if (_lockImageOn == null)
-
-                    if (!ToolbarControl.LoadImageFromFile(ref _lockImageOn, "GravityTurn/PluginData/Textures/lock_on"))
+                    _lockImageOn = new Texture2D(2, 2);
+                    if (!ToolbarControl.LoadImageFromFile(ref _lockImageOn, KSPUtil.ApplicationRootPath + "GameData/" + "GravityTurn/PluginData/Textures/lock_on.png"))
                         GravityTurner.Log("could not load lock_on icon!");
                 }
                 return _lockImageOn;
             }
         }
-        static Texture2D _lockImageOff = new Texture2D(2,2);
+        static Texture2D _lockImageOff = null;
         public static Texture2D lockImageOff
         {
             get
@@ -422,8 +424,8 @@ namespace GravityTurn.Window
                 {
                     //_lockImageOff = GameDatabase.Instance.GetTexture("GravityTurn/Textures/lock_off", false);
                     //if (_lockImageOff == null)
-
-                    if (!ToolbarControl.LoadImageFromFile(ref _lockImageOn, "GravityTurn/PluginData/Textures/lock_off"))
+                    _lockImageOff = new Texture2D(2, 2);
+                    if (!ToolbarControl.LoadImageFromFile(ref _lockImageOff, KSPUtil.ApplicationRootPath + "GameData/" + "GravityTurn/PluginData/Textures/lock_off.png"))
                         GravityTurner.Log("could not load lock_off icon!");
                 }
                 return _lockImageOff;
@@ -439,7 +441,7 @@ namespace GravityTurn.Window
                 value ? lockToggleOn : lockToggleOff, 
                 GUILayout.ExpandWidth(false), GUILayout.MinWidth(18), GUILayout.MinHeight(21));
         }
-        static Texture2D _saveIcon = new Texture2D(2, 2);
+        static Texture2D _saveIcon = null;
         public static Texture2D saveIcon
         {
             get
@@ -448,8 +450,8 @@ namespace GravityTurn.Window
                 {
                     //_saveIcon = GameDatabase.Instance.GetTexture("GravityTurn/Textures/save", false);
                     //if (_saveIcon == null)
-
-                    if (!ToolbarControl.LoadImageFromFile(ref _lockImageOn, "GravityTurn/PluginData/Textures/save"))
+                    _saveIcon = new Texture2D(2, 2);
+                    if (!ToolbarControl.LoadImageFromFile(ref _saveIcon, KSPUtil.ApplicationRootPath + "GameData/" + "GravityTurn/PluginData/Textures/save"))
                         GravityTurner.Log("could not load save icon!");
                 }
                 return _saveIcon;
@@ -482,7 +484,7 @@ namespace GravityTurn.Window
 
         public static void CopyCompactSkin()
         {
-            GUI.skin = null;
+            //GUI.skin = null;
             compactSkin = Object.Instantiate(GUI.skin);
 
             if (GuiUtils.skin == null) GuiUtils.skin = GuiUtils.defaultSkin;

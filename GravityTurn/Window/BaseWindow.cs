@@ -105,15 +105,16 @@ namespace GravityTurn.Window
             {
                 WindowVisible = false;
             }
-            GUI.DragWindow(new Rect(0, 0, 10000, 20));
+            //GUI.DragWindow();
         }
         public void drawGUI()
         {
             if (WindowVisible && ShowGUI)
             {
-                GuiUtils.LoadSkin(GuiUtils.SkinType.Compact);
-                GUI.skin = GuiUtils.skin;
-                windowPos = ClickThruBlocker.GUILayoutWindow(WindowID, windowPos, WindowGUI, WindowTitle, GUILayout.MinWidth(300));
+                //GuiUtils.LoadSkin(GuiUtils.SkinType.Compact);
+                //GUI.skin = GuiUtils.skin;
+                //windowPos = ClickThruBlocker.GUILayoutWindow(WindowID, windowPos, WindowGUI, WindowTitle, GUILayout.MinWidth(300));
+                windowPos = GUILayout.Window(WindowID, windowPos, WindowGUI, WindowTitle, GUILayout.MinWidth(300));
             }
         }
 

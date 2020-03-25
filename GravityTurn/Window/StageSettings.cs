@@ -44,6 +44,7 @@ namespace GravityTurn.Window
             helpWindow.Button("Stop at this stage number");
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
+            GUI.DragWindow();
         }
     }
 }

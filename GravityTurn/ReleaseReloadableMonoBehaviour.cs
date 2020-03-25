@@ -28,8 +28,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 // It should be copied into your project itself so your released mode
 // has no requirement for the plugin reload extension.
 
-//#if !DEBUG
-#if true
+#if !DEBUG
 using System;
 using System.Collections.Generic;
 using System.Text;

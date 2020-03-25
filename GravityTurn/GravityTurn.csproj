@@ -44,6 +44,10 @@
     <Reference Include="ClickThroughBlocker">
       <HintPath>R:\KSP_1.8.1_dev\GameData\000_ClickThroughBlocker\Plugins\ClickThroughBlocker.dll</HintPath>
     </Reference>
+   <Reference Condition="'$(Configuration)' == 'Debug'" Include="KramaxReloadExtensions">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>R:\KSP_1.8.1_dev\GameData\_0000_KramaxPluginReload\Plugins\KramaxReloadExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="ToolbarControl">
       <HintPath>R:\KSP_1.8.1_dev\GameData\001_ToolbarControl\Plugins\ToolbarControl.dll</HintPath>

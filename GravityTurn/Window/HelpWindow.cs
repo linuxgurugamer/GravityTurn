@@ -33,6 +33,7 @@ namespace GravityTurn.Window
             GUILayout.BeginVertical();
             GUILayout.TextArea(helpWindowText);
             GUILayout.EndVertical();
+            GUI.DragWindow();
         }
     }
 }
