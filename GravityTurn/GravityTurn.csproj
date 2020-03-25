@@ -44,7 +44,7 @@
     <Reference Include="ClickThroughBlocker">
       <HintPath>R:\KSP_1.8.1_dev\GameData\000_ClickThroughBlocker\Plugins\ClickThroughBlocker.dll</HintPath>
     </Reference>
-   <Reference Condition="'$(Configuration)' == 'Debug'" Include="KramaxReloadExtensions">
+    <Reference Condition="'$(Configuration)' == 'Debug'" Include="KramaxReloadExtensions">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>R:\KSP_1.8.1_dev\GameData\_0000_KramaxPluginReload\Plugins\KramaxReloadExtensions.dll</HintPath>
     </Reference>
@@ -78,6 +78,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReleaseReloadableMonoBehaviour.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="StageController.cs" />
     <Compile Include="StageStats.cs" />
     <Compile Include="Utils.cs" />

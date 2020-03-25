@@ -151,12 +151,31 @@ namespace GravityTurn.Window
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Setup", GUILayout.ExpandWidth(false)))
                 stagesettings.WindowVisible = !stagesettings.WindowVisible;
+
             turner.EnableStageManager = GUILayout.Toggle(turner.EnableStageManager, "Auto Stage");
+            if (HighLogic.CurrentGame.Parameters.CustomParams<GT>().useStock)
+                GUILayout.Label("   ");
+            if (HighLogic.CurrentGame.Parameters.CustomParams<GT>().useStock)
+                GUILayout.FlexibleSpace();
             turner.EnableSpeedup = GUILayout.Toggle(turner.EnableSpeedup, "Use Timewarp");
+
+            if (HighLogic.CurrentGame.Parameters.CustomParams<GT>().useStock)
+            {
+                GUILayout.Label("            ");
+                GUILayout.FlexibleSpace();
+            }
+
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
             turner.flightMapWindow.WindowVisible = GUILayout.Toggle(turner.flightMapWindow.WindowVisible, "Show Launch Map", GUILayout.ExpandWidth(false));
+            if (HighLogic.CurrentGame.Parameters.CustomParams<GT>().useStock)
+                GUILayout.Label("   ");
+            if (HighLogic.CurrentGame.Parameters.CustomParams<GT>().useStock)
+                GUILayout.FlexibleSpace();
             turner.EnableStats = GUILayout.Toggle(turner.EnableStats, "Show Stats", GUILayout.ExpandWidth(false));
+            if (HighLogic.CurrentGame.Parameters.CustomParams<GT>().useStock)
+                GUILayout.FlexibleSpace();
+
             if (turner.statsWindow.WindowVisible != turner.EnableStats)
             {
                 turner.statsWindow.WindowVisible = turner.EnableStats;

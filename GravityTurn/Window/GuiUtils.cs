@@ -409,7 +409,7 @@ namespace GravityTurn.Window
                     //_lockImageOn = GameDatabase.Instance.GetTexture("GravityTurn/Textures/lock_on", false);
                     // if (_lockImageOn == null)
                     _lockImageOn = new Texture2D(2, 2);
-                    if (!ToolbarControl.LoadImageFromFile(ref _lockImageOn, KSPUtil.ApplicationRootPath + "GameData/" + "GravityTurn/PluginData/Textures/lock_on.png"))
+                    if (!ToolbarControl.LoadImageFromFile(ref _lockImageOn, KSPUtil.ApplicationRootPath + "GameData/GravityTurn/PluginData/Textures/lock_on.png"))
                         GravityTurner.Log("could not load lock_on icon!");
                 }
                 return _lockImageOn;
@@ -425,7 +425,7 @@ namespace GravityTurn.Window
                     //_lockImageOff = GameDatabase.Instance.GetTexture("GravityTurn/Textures/lock_off", false);
                     //if (_lockImageOff == null)
                     _lockImageOff = new Texture2D(2, 2);
-                    if (!ToolbarControl.LoadImageFromFile(ref _lockImageOff, KSPUtil.ApplicationRootPath + "GameData/" + "GravityTurn/PluginData/Textures/lock_off.png"))
+                    if (!ToolbarControl.LoadImageFromFile(ref _lockImageOff, KSPUtil.ApplicationRootPath + "GameData/GravityTurn/PluginData/Textures/lock_off.png"))
                         GravityTurner.Log("could not load lock_off icon!");
                 }
                 return _lockImageOff;
@@ -451,7 +451,7 @@ namespace GravityTurn.Window
                     //_saveIcon = GameDatabase.Instance.GetTexture("GravityTurn/Textures/save", false);
                     //if (_saveIcon == null)
                     _saveIcon = new Texture2D(2, 2);
-                    if (!ToolbarControl.LoadImageFromFile(ref _saveIcon, KSPUtil.ApplicationRootPath + "GameData/" + "GravityTurn/PluginData/Textures/save"))
+                    if (!ToolbarControl.LoadImageFromFile(ref _saveIcon, KSPUtil.ApplicationRootPath + "GameData/GravityTurn/PluginData/Textures/save"))
                         GravityTurner.Log("could not load save icon!");
                 }
                 return _saveIcon;
@@ -469,6 +469,7 @@ namespace GravityTurn.Window
         public static GUISkin compactSkin;
         public static GUISkin transparentSkin;
 
+
         public static void SetGUIScale(double s)
         {
             scale = Mathf.Clamp((float)s, 0.2f, 5f);
@@ -484,7 +485,7 @@ namespace GravityTurn.Window
 
         public static void CopyCompactSkin()
         {
-            //GUI.skin = null;
+            GUI.skin = null;
             compactSkin = Object.Instantiate(GUI.skin);
 
             if (GuiUtils.skin == null) GuiUtils.skin = GuiUtils.defaultSkin;
@@ -523,7 +524,17 @@ namespace GravityTurn.Window
             transparentSkin.window.padding = new RectOffset(5, 5, 5, 5);
         }
 
-
+        static bool? lastSkinLoaded;
+        public static void LoadSkin(bool skinTypeCompact = true)
+        {
+            if (lastSkinLoaded != null && lastSkinLoaded == skinTypeCompact)
+                return;
+            if (skinTypeCompact)
+                LoadSkin(SkinType.Compact);
+            else
+                LoadSkin(SkinType.Default);
+            lastSkinLoaded = skinTypeCompact;
+        }
         public static void LoadSkin(SkinType skinType)
         {
             if (defaultSkin == null) CopyDefaultSkin();

@@ -111,10 +111,15 @@ namespace GravityTurn.Window
         {
             if (WindowVisible && ShowGUI)
             {
-                //GuiUtils.LoadSkin(GuiUtils.SkinType.Compact);
-                //GUI.skin = GuiUtils.skin;
-                //windowPos = ClickThruBlocker.GUILayoutWindow(WindowID, windowPos, WindowGUI, WindowTitle, GUILayout.MinWidth(300));
-                windowPos = GUILayout.Window(WindowID, windowPos, WindowGUI, WindowTitle, GUILayout.MinWidth(300));
+                if (!HighLogic.CurrentGame.Parameters.CustomParams<GT>().useStock)
+                {
+                    GuiUtils.LoadSkin(HighLogic.CurrentGame.Parameters.CustomParams<GT>().useCompact);
+                    GUI.skin = GuiUtils.skin;
+                }
+                else
+                    GUI.skin = HighLogic.Skin;
+                windowPos = ClickThruBlocker.GUILayoutWindow(WindowID, windowPos, WindowGUI, WindowTitle, GUILayout.MinWidth(300));
+                //windowPos = GUILayout.Window(WindowID, windowPos, WindowGUI, WindowTitle, GUILayout.MinWidth(300));
             }
         }
 
