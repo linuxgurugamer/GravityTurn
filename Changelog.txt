@@ -2,6 +2,7 @@ Changelog
 
 1.8.0.3
 	Fixed total unresponsiveness of mod 
+	Fixed error when the "Previous Best Settings" was pressed when there weren't any 
 
 1.8.0.2
 	Updated .gitignore which was preventing the GameData from being updated

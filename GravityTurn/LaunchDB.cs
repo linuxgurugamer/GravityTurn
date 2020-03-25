@@ -146,10 +146,13 @@ namespace GravityTurn
         ///</summary>
         public bool BestSettings(out double TurnAngle, out double StartSpeed)
         {
-            GravityTurner.DebugMessage = String.Format("LaunchDB entries: {0}", DB.Count);
-            DB.Sort();
             TurnAngle = 0;
             StartSpeed = 0;
+            if (DB.Count == 0)
+                return false;
+            GravityTurner.DebugMessage = String.Format("LaunchDB entries: {0}", DB.Count);
+            DB.Sort();
+
             GravityTurner.Log("DB[0]: mh={0:0.00}, ok={1}", DB[0].MaxHeat, DB[0].LaunchSuccess);
             if (DB.Count < 1 || DB[0].MaxHeat >= 1 || !DB[0].LaunchSuccess)
                 return false;
