@@ -7,11 +7,25 @@ namespace GravityTurn.Window
 {
     public class StatsWindow: BaseWindow
     {
+        bool initted = false;
         public StatsWindow(GravityTurner turner, int WindowID)
             : base(turner, WindowID)
         {
             WindowTitle = "GravityTurn Statistics Window";
             windowPos.height = 200;
+            windowPos.width = 310;
+        }
+
+        public void InitPos()
+        {
+            if (!initted)
+            {
+                windowPos.left = GravityTurner.mainWindow.windowPos.left - windowPos.width;
+                if (windowPos.left < 0)
+                    windowPos.left = GravityTurner.mainWindow.windowPos.left + GravityTurner.mainWindow.windowPos.width;
+                windowPos.top = GravityTurner.mainWindow.windowPos.top;
+                initted = true;
+            }
         }
 
         public override void WindowGUI(int windowID)

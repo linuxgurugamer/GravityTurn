@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GravityTurn.Window
 {
-    class MainWindow :  BaseWindow
+    public class MainWindow :  BaseWindow
     {
 
         HelpWindow helpWindow = null;
@@ -17,10 +17,13 @@ namespace GravityTurn.Window
             turner = inTurner;
             helpWindow = new HelpWindow(inTurner,inWindowID+1);
             stagesettings = new StageSettings(inTurner, inWindowID + 2, helpWindow);
+
             windowPos.width = 300;
             windowPos.height = 100;
+            windowPos.left = Screen.width - (windowPos.width + 40);
+            windowPos.top = 30;
             Version v = typeof(GravityTurner).Assembly.GetName().Version;
-            WindowTitle = String.Format("GravityTurn V {0}.{1}.{2}", v.Major, v.Minor, v.Build);
+            WindowTitle = String.Format("GravityTurn");
         }
 
         private void UiStartSpeed()
@@ -150,7 +153,10 @@ namespace GravityTurn.Window
             UiPressureCutoff();
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Setup", GUILayout.ExpandWidth(false)))
+            {
                 stagesettings.WindowVisible = !stagesettings.WindowVisible;
+                stagesettings.InitPos();
+            }
 
             turner.EnableStageManager = GUILayout.Toggle(turner.EnableStageManager, "Auto Stage");
             if (HighLogic.CurrentGame.Parameters.CustomParams<GT>().useStock)
@@ -185,6 +191,8 @@ namespace GravityTurn.Window
                     turner.statsWindow.windowPos.height = 200;
                     GravityTurner.DebugShow = false;
                 }
+                else
+                    turner.statsWindow.InitPos();
             }
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();

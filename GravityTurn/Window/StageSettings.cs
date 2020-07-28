@@ -8,13 +8,25 @@ namespace GravityTurn.Window
     public class StageSettings : BaseWindow
     {
         HelpWindow helpWindow;
+        bool initted = false;
         public StageSettings(GravityTurner turner, int WindowID, HelpWindow inhelpWindow)
             : base(turner, WindowID)
         {
             helpWindow = inhelpWindow;
             WindowTitle = "GravityTurn Stage Settings";
+            windowPos.width = 300;
         }
-
+        public void InitPos()
+        {
+            if (!initted)
+            {
+                windowPos.left = GravityTurner.mainWindow.windowPos.left - windowPos.width;
+                if (windowPos.left < 0)
+                    windowPos.left = GravityTurner.mainWindow.windowPos.left + GravityTurner.mainWindow.windowPos.width;
+                windowPos.top = GravityTurner.mainWindow.windowPos.top + GravityTurner.mainWindow.windowPos.height / 2;
+                initted = true;
+            }
+        }
         public override void WindowGUI(int windowID)
         {
             base.WindowGUI(windowID);

@@ -1,5 +1,10 @@
 Changelog
 
+1.8.1
+	Made window open next to the toolbar on the right
+	Made stats window open to the left (or right) of the main window
+	Made Settings window open to the left (or right) of the main window
+
 1.8.0.3
 	Fixed total unresponsiveness of mod 
 	Fixed error when the "Previous Best Settings" was pressed when there weren't any 

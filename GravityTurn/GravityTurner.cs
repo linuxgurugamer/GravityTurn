@@ -101,7 +101,7 @@ namespace GravityTurn
         //public ApplicationLauncherButton button;
         internal ToolbarControl toolbarControl;
 
-        Window.MainWindow mainWindow = null;
+        internal static  Window.MainWindow mainWindow = null;
         public Window.WindowManager windowManager = new Window.WindowManager();
         public Window.FlightMapWindow flightMapWindow;
         public Window.StatsWindow statsWindow;
