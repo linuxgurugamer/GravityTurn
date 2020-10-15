@@ -20,8 +20,8 @@ namespace GravityTurn.Window
 
             windowPos.width = 300;
             windowPos.height = 100;
-            windowPos.left = Screen.width - (windowPos.width + 40);
-            windowPos.top = 30;
+            //windowPos.left = Screen.width - (windowPos.width + 40);
+            //windowPos.top = 30;
             Version v = typeof(GravityTurner).Assembly.GetName().Version;
             WindowTitle = String.Format("GravityTurn");
         }

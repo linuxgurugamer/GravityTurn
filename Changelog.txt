@@ -1,5 +1,8 @@
 Changelog
 
+1.8.1.1
+	Reverted the fixed opening of the initial window position
+
 1.8.1
 	Made window open next to the toolbar on the right
 	Made stats window open to the left (or right) of the main window
