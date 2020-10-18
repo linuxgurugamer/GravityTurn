@@ -161,9 +161,11 @@ namespace GravityTurn
         {
             for (int i = 0; i < p.Modules.Count; i++)
             {
-                PartModule m = p.Modules[i];
-                ModuleEngines eng = m as ModuleEngines;
-                if (eng != null) return !eng.getFlameoutState;
+                ModuleEngines eng = p.Modules[i] as ModuleEngines;
+                if (eng != null)
+                {
+                    return !eng.getFlameoutState;
+                }
 
             }
             return false;

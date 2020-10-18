@@ -142,6 +142,7 @@ namespace GravityTurn
             return launchdb.IsEmpty();
         }
 
+        static internal int[] enginePlates = null;
         #endregion
 
         private int lineno { get { StackFrame callStack = new StackFrame(1, true); return callStack.GetFileLineNumber(); } }
@@ -422,9 +423,31 @@ namespace GravityTurn
             SaveParameters();
             LaunchName = new string(getVessel.vesselName.ToCharArray());
             LaunchBody = getVessel.mainBody;
+            GetEnginePlates();
         }
 
-        double GetMaxThrust(Vessel vessel)
+        void GetEnginePlates()
+        {
+            if (enginePlates != null)
+                enginePlates = null;
+            enginePlates = new int[getVessel.Parts.Count];
+            for (int i = 0; i < getVessel.parts.Count; i++)
+            {
+                Part p = getVessel.parts[i];
+                for (int i1 = 0; i1 < p.Modules.Count; i1++)
+                {
+                    ModuleDecouple mDecouple = p.Modules[i1] as ModuleDecouple;
+                    if (mDecouple != null)
+                    {
+                        if (mDecouple.IsEnginePlate()) enginePlates[i] = 1;
+                        break;
+                    }
+                }
+
+            }
+        }
+
+            double GetMaxThrust(Vessel vessel)
         {
             double thrust = 0;
             FuelFlowSimulation.Stats[] stats;

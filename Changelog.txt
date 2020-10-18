@@ -1,5 +1,8 @@
 Changelog
 
+1.8.1.2
+	Fixed autostaging with engine plates
+
 1.8.1.1
 	Reverted the fixed opening of the initial window position
 

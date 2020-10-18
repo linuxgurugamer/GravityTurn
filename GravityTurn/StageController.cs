@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using KSP.UI.Screens;
 using Smooth.Slinq;
+using KSP.Localization;
 
 namespace GravityTurn
 {
@@ -41,22 +42,23 @@ namespace GravityTurn
                 return;
 
             GravityTurner.DebugMessage += "  Lifted off\n";
-             
+
             //only decouple fairings if the dynamic pressure and altitude conditions are respected
             if (!topFairingDeployed)
             {
                 Part fairing = GetTopmostFairing(vessel);
-
+                bool fairingReadyToDeploy = false;
                 if (fairing == null)
                     GravityTurner.DebugMessage += "  No top fairing\n";
-
-                if (fairing != null)
+                else
+                {
                     GravityTurner.DebugMessage += "  Has top fairing\n";
 
-                bool fairingReadyToDeploy = (vesselState.dynamicPressure < turner.FairingPressure && Math.Abs(vesselState.dynamicPressure - vesselState.maxQ) > 0.1) && ((VesselState.isLoadedFAR && (vesselState.maxQ > vessel.mainBody.GetPressure(0) * 1000 / 5)) || (vesselState.maxQ > vessel.mainBody.atmospherePressureSeaLevel / 2));
+                    fairingReadyToDeploy = (vesselState.dynamicPressure < turner.FairingPressure && Math.Abs(vesselState.dynamicPressure - vesselState.maxQ) > 0.1) && ((VesselState.isLoadedFAR && (vesselState.maxQ > vessel.mainBody.GetPressure(0) * 1000 / 5)) || (vesselState.maxQ > vessel.mainBody.atmospherePressureSeaLevel / 2));
 
-                if (fairingReadyToDeploy)
-                    GravityTurner.DebugMessage += "  Fairing ready to be deployed\n";
+                    if (fairingReadyToDeploy)
+                        GravityTurner.DebugMessage += "  Fairing ready to be deployed\n";
+                }
 
                 if (fairing != null && fairing.IsUnfiredDecoupler() && fairingReadyToDeploy)
                 {
@@ -73,6 +75,7 @@ namespace GravityTurn
 
             //don't decouple active or idle engines or tanks
             List<int> burnedResources = FindBurnedResources();
+
             if (InverseStageDecouplesActiveOrIdleEngineOrTank(StageManager.CurrentStage - 1, vessel, burnedResources))
                 return;
 
@@ -127,7 +130,8 @@ namespace GravityTurn
             for (int i = 0; i < v.parts.Count; i++)
             {
                 Part p = v.parts[i];
-                if (p.inverseStage == inverseStage && p.IsUnfiredDecoupler() && HasActiveOrIdleEngineOrTankDescendant(p, tankResources))
+
+                if (p.inverseStage + GravityTurner.enginePlates[i] == inverseStage && p.IsUnfiredDecoupler() && HasActiveOrIdleEngineOrTankDescendant(p, tankResources))
                 {
                     return true;
                 }
