@@ -10,6 +10,7 @@ using KSP.UI.Screens;
 using KramaxReloadExtensions;
 using KSP.UI.Screens.Flight;
 using ToolbarControl_NS;
+using System.Linq;
 
 namespace GravityTurn
 {
@@ -101,7 +102,7 @@ namespace GravityTurn
         //public ApplicationLauncherButton button;
         internal ToolbarControl toolbarControl;
 
-        internal static  Window.MainWindow mainWindow = null;
+        internal static Window.MainWindow mainWindow = null;
         public Window.WindowManager windowManager = new Window.WindowManager();
         public Window.FlightMapWindow flightMapWindow;
         public Window.StatsWindow statsWindow;
@@ -142,7 +143,42 @@ namespace GravityTurn
             return launchdb.IsEmpty();
         }
 
-        static internal int[] enginePlates = null;
+        internal class EnginePlate
+        {
+            internal bool isEnginePlate;
+            internal AttachNode bottomNode;
+
+            internal EnginePlate(bool isEnginePlate, Part p)
+            {
+                this.isEnginePlate = isEnginePlate;
+                if (isEnginePlate)
+                {
+                    bottomNode = GetNode("bottom", p);
+                }
+            }
+            internal void SetAsEnginePlate(bool isEnginePlate, Part p)
+            {
+                this.isEnginePlate = isEnginePlate;
+                if (isEnginePlate)
+                {
+                    bottomNode = GetNode("bottom", p);
+                }
+            }
+            AttachNode GetNode(string nodeId, Part p)
+            {
+                foreach (var attachNode in p.attachNodes.Where(an => an != null))
+                {
+                    if (p.srfAttachNode != null && attachNode == p.srfAttachNode)
+                        continue;
+                    if (attachNode.id == nodeId)
+                        return attachNode;
+
+                }
+                return null;
+            }
+
+        }
+        static internal Dictionary<uint, EnginePlate> enginePlates;
         #endregion
 
         private int lineno { get { StackFrame callStack = new StackFrame(1, true); return callStack.GetFileLineNumber(); } }
@@ -152,7 +188,7 @@ namespace GravityTurn
             )
         {
 
-            string method = "";
+            //string method = "";
 #if DEBUG
             StackFrame stackFrame = new StackFrame(1, true);
             method = string.Format(" [{0}]|{1}", stackFrame.GetMethod().ToString(), stackFrame.GetFileLineNumber());
@@ -162,7 +198,6 @@ namespace GravityTurn
                 incomingMessage = format;
             else
                 incomingMessage = string.Format(format, args);
-            UnityEngine.Debug.Log(string.Format("GravityTurn{0} : {1}", method, incomingMessage));
         }
 
 
@@ -229,7 +264,12 @@ namespace GravityTurn
                 mainWindow = new Window.MainWindow(this, 6378070);
                 flightMapWindow = new Window.FlightMapWindow(this, 548302);
                 statsWindow = new Window.StatsWindow(this, 6378070 + 4);
-
+                double h = 80f;
+                if (FlightGlobals.ActiveVessel.mainBody.atmosphere)
+                {
+                    h = Math.Max(h, FlightGlobals.ActiveVessel.mainBody.atmosphereDepth + 10000f);
+                    DestinationHeight = new EditableValue(h, locked: true);
+                }
                 GameEvents.onShowUI.Add(ShowGUI);
                 GameEvents.onHideUI.Add(HideGUI);
             }
@@ -428,26 +468,28 @@ namespace GravityTurn
 
         void GetEnginePlates()
         {
-            if (enginePlates != null)
-                enginePlates = null;
-            enginePlates = new int[getVessel.Parts.Count];
+            enginePlates = new Dictionary<uint, EnginePlate>();
             for (int i = 0; i < getVessel.parts.Count; i++)
             {
                 Part p = getVessel.parts[i];
                 for (int i1 = 0; i1 < p.Modules.Count; i1++)
                 {
                     ModuleDecouple mDecouple = p.Modules[i1] as ModuleDecouple;
+                    enginePlates[p.flightID] = new EnginePlate( false, p);
                     if (mDecouple != null)
                     {
-                        if (mDecouple.IsEnginePlate()) enginePlates[i] = 1;
-                        break;
+                        if (mDecouple.IsEnginePlate())
+                        {
+                            enginePlates[p.flightID].SetAsEnginePlate(true, p);
+                            break;
+                        }
                     }
                 }
 
             }
         }
 
-            double GetMaxThrust(Vessel vessel)
+        double GetMaxThrust(Vessel vessel)
         {
             double thrust = 0;
             FuelFlowSimulation.Stats[] stats;
@@ -672,8 +714,7 @@ namespace GravityTurn
             }
             else
             {
-                double minInsertionHeight = vessel.mainBody.atmosphere ? vessel.StableOrbitHeight() / 4 : Math.Max(DestinationHeight*667, vessel.StableOrbitHeight()*0.667);
-
+                double minInsertionHeight = vessel.mainBody.atmosphere ? vessel.StableOrbitHeight() / 4 : Math.Max(DestinationHeight * 667, vessel.StableOrbitHeight() * 0.667);
                 if (EnableStageManager && stage != null)
                     stage.Update();
 
@@ -716,12 +757,12 @@ namespace GravityTurn
                     DebugMessage += "In Pitch program\n";
                     double diffUT = Planetarium.GetUniversalTime() - delayUT;
                     float newPitch = Mathf.Min((float)(((double)TurnAngle * diffUT) / 5.0d + 2.0d), TurnAngle);
-                    double pitch = (90d - vesselState.vesselPitch + vessel.ProgradePitch() + 90)/2;
+                    double pitch = (90d - vesselState.vesselPitch + vessel.ProgradePitch() + 90) / 2;
                     attitude.attitudeTo(Quaternion.Euler(-90 + newPitch, LaunchHeading(vessel), 0) * RollRotation(), AttitudeReference.SURFACE_NORTH, this);
                     DebugMessage += String.Format("TurnAngle: {0:0.00}\n", TurnAngle.value);
                     DebugMessage += String.Format("Target pitch: {0:0.00}\n", newPitch);
                     DebugMessage += String.Format("Current pitch: {0:0.00}\n", pitch);
-                    DebugMessage += String.Format("Prograde pitch: {0:0.00}\n", vessel.ProgradePitch()+90);
+                    DebugMessage += String.Format("Prograde pitch: {0:0.00}\n", vessel.ProgradePitch() + 90);
                 }
                 else if (vesselState.dynamicPressure > vesselState.maxQ * 0.5 || vesselState.dynamicPressure > PressureCutoff || vessel.altitude < minInsertionHeight)
                 { // Still ascending, or not yet below the cutoff pressure or below min insertion heigt

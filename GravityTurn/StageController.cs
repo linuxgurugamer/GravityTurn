@@ -10,7 +10,6 @@ namespace GravityTurn
     public class StageController
     {
         public StageController(GravityTurner turner)
-
         {
             this.turner = turner;
         }
@@ -75,7 +74,6 @@ namespace GravityTurn
 
             //don't decouple active or idle engines or tanks
             List<int> burnedResources = FindBurnedResources();
-
             if (InverseStageDecouplesActiveOrIdleEngineOrTank(StageManager.CurrentStage - 1, vessel, burnedResources))
                 return;
 
@@ -130,10 +128,23 @@ namespace GravityTurn
             for (int i = 0; i < v.parts.Count; i++)
             {
                 Part p = v.parts[i];
-
-                if (p.inverseStage + GravityTurner.enginePlates[i] == inverseStage && p.IsUnfiredDecoupler() && HasActiveOrIdleEngineOrTankDescendant(p, tankResources))
+                if (!GravityTurner.enginePlates[p.flightID].isEnginePlate)
                 {
-                    return true;
+                    if (p.inverseStage == inverseStage && p.IsUnfiredDecoupler() && HasActiveOrIdleEngineOrTankDescendant(p, tankResources))
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (GravityTurner.enginePlates[p.flightID].bottomNode != null && GravityTurner.enginePlates[p.flightID].bottomNode.attachedPart != null)
+                    {
+                        Part attachedPart = GravityTurner.enginePlates[p.flightID].bottomNode.attachedPart;
+                        if ( HasActiveOrIdleEngineOrTankDescendant(attachedPart, tankResources))
+                        {
+                            return true;
+                        }
+                    }
                 }
             }
             return false;

@@ -13,6 +13,8 @@ namespace GravityTurn
         public double value = 0;
         [Persistent]
         public bool locked = false;
+        [Persistent]
+        public bool initialized = false;
 
         public bool valid = true;
         public String format = "{0:0.00}";
@@ -20,8 +22,12 @@ namespace GravityTurn
 
         public EditableValue(double initialValue,string printFormat="{0:0.00}", bool locked = false)
         {
-            this.locked = locked;
-            value = initialValue;
+            if (!initialized)
+            {
+                this.locked = locked;
+                value = initialValue;
+                initialized = true;
+            }
             format = printFormat;
             valid = true;
             str = value.ToString();
@@ -30,7 +36,11 @@ namespace GravityTurn
         public EditableValue(string initialStr, string printFormat = "{0:0.00}", bool locked = false)
         {
             this.locked = locked;
-            format = printFormat;
+            if (!initialized)
+            {
+                format = printFormat;
+                initialized = true;
+            }
             try
             {
                 value = double.Parse(initialStr);
