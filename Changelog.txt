@@ -1,5 +1,8 @@
 Changelog
 
+1.8.1.3
+	Fixed error when vessel name had a double-quote in it
+
 1.8.1.2
 	Fixed autostaging with engine plates
 	Fixed saving values when reverting to launch

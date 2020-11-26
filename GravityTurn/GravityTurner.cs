@@ -203,11 +203,13 @@ namespace GravityTurn
 
         string DefaultConfigFilename(Vessel vessel)
         {
-            return LaunchDB.GetBaseFilePath(this.GetType(), string.Format("gt_vessel_default_{0}.cfg", vessel.mainBody.name));
+            string name = vessel.mainBody.name.Replace('"', '_');
+            return LaunchDB.GetBaseFilePath(this.GetType(), string.Format("gt_vessel_default_{0}.cfg", name));
         }
         string ConfigFilename(Vessel vessel)
         {
-            return LaunchDB.GetBaseFilePath(this.GetType(), string.Format("gt_vessel_{0}_{1}.cfg", vessel.id.ToString(), vessel.mainBody.name));
+            string name = vessel.mainBody.name.Replace('"', '_');
+            return LaunchDB.GetBaseFilePath(this.GetType(), string.Format("gt_vessel_{0}_{1}.cfg", vessel.id.ToString(), name));
         }
 
         private void OnGUI()
