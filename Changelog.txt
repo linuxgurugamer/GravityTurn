@@ -1,5 +1,8 @@
 Changelog
 
+1.8.1.4
+	Fixed error where launching from a planet with an atmosphere would set the initial destination height to be 1000x as high as it should have been.  Only occurred with new vessels
+
 1.8.1.3
 	Fixed error when vessel name had a double-quote in it
 

@@ -270,7 +270,7 @@ namespace GravityTurn
                 if (FlightGlobals.ActiveVessel.mainBody.atmosphere)
                 {
                     h = Math.Max(h, FlightGlobals.ActiveVessel.mainBody.atmosphereDepth + 10000f);
-                    DestinationHeight = new EditableValue(h, locked: true);
+                    DestinationHeight = new EditableValue(h, locked: true) / 1000;
                 }
                 GameEvents.onShowUI.Add(ShowGUI);
                 GameEvents.onHideUI.Add(HideGUI);
