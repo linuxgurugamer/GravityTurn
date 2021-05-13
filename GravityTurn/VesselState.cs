@@ -275,7 +275,7 @@ namespace GravityTurn
         {
             if (isLoadedFAR == true)
             {
-                AssemblyLoader.LoadedAssembly﻿ FAR = AssemblyLoader.loadedAssemblies.SingleOrDefault(a => a.dllName == "FerramAerospaceResearch");
+                AssemblyLoader.LoadedAssembly FAR = AssemblyLoader.loadedAssemblies.SingleOrDefault(a => a.dllName == "FerramAerospaceResearch");
                 //try
                 //{
                     return FAR.assembly.GetTypes().SingleOrDefault(t => t.Name == "FARAPI").GetMethod("CalculateVesselAeroForces", BindingFlags.Public | BindingFlags.Static);
@@ -296,7 +296,7 @@ namespace GravityTurn
         {
             if (isLoadedFAR == true)
             {
-                AssemblyLoader.LoadedAssembly﻿ FAR = AssemblyLoader.loadedAssemblies.SingleOrDefault(a => a.dllName == "FerramAerospaceResearch");
+                AssemblyLoader.LoadedAssembly FAR = AssemblyLoader.loadedAssemblies.SingleOrDefault(a => a.dllName == "FerramAerospaceResearch");
                 //try
                 //{
                     return FAR.assembly.GetTypes().SingleOrDefault(t => t.Name == "FARAPI").GetMethod("ActiveVesselDynPres", BindingFlags.Public | BindingFlags.Static);
