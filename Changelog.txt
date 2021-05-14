@@ -1,5 +1,10 @@
 Changelog
 
+1.8.1.5
+	Thanks to github user @MacGyverNL for these:
+		Guard reading rcsThrustAvailable with a null-check
+		Remove zero-width non-breaking spaces.
+
 1.8.1.4
 	Fixed error where launching from a planet with an atmosphere would set the initial destination height to be 1000x as high as it should have been.  Only occurred with new vessels
 

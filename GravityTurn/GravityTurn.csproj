@@ -107,7 +107,7 @@
     <OutputDir>$(SolutionDir)\..\GameData\GravityTurn</OutputDir>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>	"$(DevEnvDir)\texttransform.exe" "$(ProjectDir)AssemblyVersion.tt"</PreBuildEvent>
+    <PreBuildEvent>"$(DevEnvDir)\texttransform.exe" "$(ProjectDir)AssemblyVersion.tt"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>
@@ -125,14 +125,13 @@ IF "%25KSPDIR%25"=="" (
 
 )
 
-start /D $(SolutionDir) /WAIT deploy.bat  $(TargetDir) $(TargetFileName)
+start /D $(SolutionDir) /WAIT deploy.bat  $(TargetDir) $(TargetFileName) $(TargetName)
 
 if $(ConfigurationName) == Release (	
 
-	start /D $(SolutionDir) /WAIT buildRelease.bat $(TargetDir) $(TargetFileName)
+	start /D $(SolutionDir) /WAIT buildRelease.bat $(TargetDir) $(TargetFileName) $(TargetName)
 
-)
-</PostBuildEvent>
+)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
