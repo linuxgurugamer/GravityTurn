@@ -928,12 +928,22 @@ namespace GravityTurn
         }
 
         // Decide whether to control the RCS thrusters from the main throttle
+        //
+        // MacGyverNL: With the removal of the code setting / updating rcsThrustAvailable, a bug was introduced
+        //             because rcsThrustAvailable appears to always be null.
+        //             Without knowing more about the internals of this mod, I do not dare to touch it
+        //             beyond putting a defensive if-statement around the update of thrustVectorMaxThrottle.
+        //             The boolean that this method sets does not appear to be ever used inside the mod,
+        //             but it's declared public so I didn't dare to comment it out entirely.
         void ToggleRCSThrust(Vessel vessel)
         {
             if (thrustVectorMaxThrottle.magnitude == 0 && vessel.ActionGroups[KSPActionGroup.RCS])
             {
                 rcsThrust = true;
-                thrustVectorMaxThrottle += (Vector3d)(vessel.transform.up) * rcsThrustAvailable.down;
+                if (rcsThrustAvailable != null)
+                {
+                    thrustVectorMaxThrottle += (Vector3d)(vessel.transform.up) * rcsThrustAvailable.down;
+                }
             }
             else
             {
