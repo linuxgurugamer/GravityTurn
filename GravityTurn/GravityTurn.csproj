@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GravityTurn</RootNamespace>
-    <AssemblyName>GravityTurn</AssemblyName>
+    <AssemblyName>GravityTurnContinued</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -43,9 +43,6 @@
     </Reference>
     <Reference Include="ClickThroughBlocker">
       <HintPath>R:\KSP_1.9.1_dev\GameData\000_ClickThroughBlocker\Plugins\ClickThroughBlocker.dll</HintPath>
-    </Reference>
-    <Reference Include="KSP_Log">
-      <HintPath>R:\KSP_1.9.1_dev\GameData\SpaceTuxLibrary\Plugins\KSP_Log.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="ToolbarControl">

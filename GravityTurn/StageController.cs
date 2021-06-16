@@ -128,21 +128,27 @@ namespace GravityTurn
             for (int i = 0; i < v.parts.Count; i++)
             {
                 Part p = v.parts[i];
-                if (!GravityTurner.enginePlates[p.flightID].isEnginePlate)
+                if (GravityTurner.enginePlates.TryGetValue(p.flightID, out GravityTurner.EnginePlate activePlate))
                 {
-                    if (p.inverseStage == inverseStage && p.IsUnfiredDecoupler() && HasActiveOrIdleEngineOrTankDescendant(p, tankResources))
+                    //if (!GravityTurner.enginePlates[p.flightID].isEnginePlate)
+                    if (!activePlate.isEnginePlate)
                     {
-                        return true;
-                    }
-                }
-                else
-                {
-                    if (GravityTurner.enginePlates[p.flightID].bottomNode != null && GravityTurner.enginePlates[p.flightID].bottomNode.attachedPart != null)
-                    {
-                        Part attachedPart = GravityTurner.enginePlates[p.flightID].bottomNode.attachedPart;
-                        if ( HasActiveOrIdleEngineOrTankDescendant(attachedPart, tankResources))
+                        if (p.inverseStage == inverseStage && p.IsUnfiredDecoupler() && HasActiveOrIdleEngineOrTankDescendant(p, tankResources))
                         {
                             return true;
+                        }
+                    }
+                    else
+                    {
+                        //if (GravityTurner.enginePlates[p.flightID].bottomNode != null && GravityTurner.enginePlates[p.flightID].bottomNode.attachedPart != null)
+                        if (activePlate.bottomNode != null && activePlate.bottomNode.attachedPart != null)
+                        {
+                            //Part attachedPart = GravityTurner.enginePlates[p.flightID].bottomNode.attachedPart;
+                            Part attachedPart = activePlate.bottomNode.attachedPart;
+                            if (HasActiveOrIdleEngineOrTankDescendant(attachedPart, tankResources))
+                            {
+                                return true;
+                            }
                         }
                     }
                 }

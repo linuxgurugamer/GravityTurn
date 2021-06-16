@@ -598,7 +598,7 @@ namespace GravityTurn
                     // Some brilliant engine mod seems to consider that FuelFlow is not something they should properly initialize
                     if (minFuelFlow == 0 && engine.minThrust > 0)
                     {
-                        maxFuelFlow = engine.minThrust / (engine.atmosphereCurve.Evaluate(0f) * engine.g);
+                        minFuelFlow = engine.minThrust / (engine.atmosphereCurve.Evaluate(0f) * engine.g);
                     }
                     if (maxFuelFlow == 0 && engine.maxThrust > 0)
                     {

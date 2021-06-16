@@ -272,7 +272,7 @@ namespace GravityTurn
             DBEntry newentry = new DBEntry();
             DB.Add(newentry);
             return newentry;
-        } 
+        }
 
         ///<summary>
         /// find a similar DBEntry based on angle, speed and destination height, so we don't have duplicates.
@@ -281,7 +281,7 @@ namespace GravityTurn
         {
             foreach (DBEntry entry in DB)
             {
-                if (Math.Abs(entry.TurnAngle - turnAngle)<0.05 && Math.Abs(entry.StartSpeed - startSpeed) < 0.1 && Math.Abs(entry.DestinationHeight - destinationHeight) < 0.1)
+                if (Math.Abs(entry.TurnAngle - turnAngle) < 0.05 && Math.Abs(entry.StartSpeed - startSpeed) < 0.1 && Math.Abs(entry.DestinationHeight - destinationHeight) < 0.1)
                     return entry;
             }
             return null;
@@ -333,7 +333,7 @@ namespace GravityTurn
             root = ConfigNode.CreateConfigFromObject(this);
             root.Save(GetFilename());
         }
-        public void  Clear()
+        public void Clear()
         {
             DB.Clear();
             Save();
@@ -341,25 +341,7 @@ namespace GravityTurn
 
         public static string GetBaseFilePath(Type t, string sub)
         {
-            try
-            {
-
-#if DEBUG
-                //return System.IO.Directory.GetCurrentDirectory() + @"/GameData/GravityTurn/Plugins/PluginData/GravityTurn/" + sub;
-                return System.IO.Directory.GetCurrentDirectory() + @"/GameData/GravityTurn/PluginData/" + sub;            
-#else
-                return IOUtils.GetFilePathFor(t, sub);
-#endif
-
-            }
-            catch (Exception ex)
-            {
-                GravityTurner.Log("Exception: {0}", ex.ToString());
-                return System.IO.Directory.GetCurrentDirectory() + @"/GameData/GravityTurn/PluginData/" + sub;            }
-                //return System.IO.Directory.GetCurrentDirectory() + @"/GameData/GravityTurn/Plugins/PluginData/GravityTurn/ + sub;            }
-            }
-
+            return System.IO.Directory.GetCurrentDirectory() + @"/GameData/GravityTurn/PluginData/" + sub;
         }
-
-
+    }
 }

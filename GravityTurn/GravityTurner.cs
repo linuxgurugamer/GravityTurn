@@ -1,14 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Runtime.CompilerServices;
 using UnityEngine;
-using KSP.IO;
 using System.IO;
 using System.Diagnostics;
 using KSP.UI.Screens;
 using KramaxReloadExtensions;
-using KSP.UI.Screens.Flight;
 using ToolbarControl_NS;
 using System.Linq;
 
@@ -189,7 +185,7 @@ namespace GravityTurn
         {
 
             //string method = "";
-#if DEBUG
+#if DEBUGfalse
             StackFrame stackFrame = new StackFrame(1, true);
             method = string.Format(" [{0}]|{1}", stackFrame.GetMethod().ToString(), stackFrame.GetFileLineNumber());
 #endif
@@ -198,6 +194,9 @@ namespace GravityTurn
                 incomingMessage = format;
             else
                 incomingMessage = string.Format(format, args);
+#if false
+            UnityEngine.Debug.Log("GravityTurn: " + incomingMessage);
+#endif
         }
 
 
@@ -274,6 +273,8 @@ namespace GravityTurn
                 }
                 GameEvents.onShowUI.Add(ShowGUI);
                 GameEvents.onHideUI.Add(HideGUI);
+
+                LoadKeybind();
             }
             catch (Exception ex)
             {
@@ -477,7 +478,7 @@ namespace GravityTurn
                 for (int i1 = 0; i1 < p.Modules.Count; i1++)
                 {
                     ModuleDecouple mDecouple = p.Modules[i1] as ModuleDecouple;
-                    enginePlates[p.flightID] = new EnginePlate( false, p);
+                    enginePlates[p.flightID] = new EnginePlate(false, p);
                     if (mDecouple != null)
                     {
                         if (mDecouple.IsEnginePlate())
@@ -519,51 +520,54 @@ namespace GravityTurn
                 if (flightMapWindow.flightMap != null && Launching)
                     flightMapWindow.flightMap.UpdateMap(getVessel);
             }
-            else if (EnableStats && !getVessel.Landed && !getVessel.IsInStableOrbit())
+            else
             {
-                CalculateLosses(getVessel);
-                stagestats.editorBody = getVessel.mainBody;
-                vesselState.Update(getVessel);
-                attitude.OnFixedUpdate();
-                stagestats.OnFixedUpdate();
-                stagestats.RequestUpdate(this);
-            }
-            else if (EnableStats && !getVessel.Landed && getVessel.IsInStableOrbit())
-            {
-                if (VectorLoss > 0.01)
+                if (EnableStats && !getVessel.Landed && !getVessel.IsInStableOrbit())
                 {
-                    Message = string.Format(
-                        "Total Vector Loss:\t{0:0.00} m/s\n" +
-                        "Total Loss:\t{1:0.00} m/s\n" +
-                        "Total Burn:\t\t{2:0.0}\n\n",
-                        VectorLoss,
-                        TotalLoss,
-                        TotalBurn
-                        );
-                }
-                else
-                    Message = "";
-
-                Message += string.Format(
-                    "Apoapsis:\t\t{0}\n" +
-                    "Periapsis:\t\t{1}\n" +
-                    "Inclination:\t\t{2:0.0} °\n",
-                    OrbitExtensions.FormatOrbitInfo(getVessel.orbit.ApA, getVessel.orbit.timeToAp),
-                    OrbitExtensions.FormatOrbitInfo(getVessel.orbit.PeA, getVessel.orbit.timeToPe),
-                    getVessel.orbit.inclination
-                    );
-
-            }
-            else if (EnableStats && getVessel.Landed)
-            {
-                double diffUT = Planetarium.GetUniversalTime() - delayUT;
-                if (diffUT > 1 || Double.IsNaN(delayUT))
-                {
+                    CalculateLosses(getVessel);
+                    stagestats.editorBody = getVessel.mainBody;
                     vesselState.Update(getVessel);
+                    attitude.OnFixedUpdate();
                     stagestats.OnFixedUpdate();
                     stagestats.RequestUpdate(this);
-                    Message = PreflightInfo(getVessel);
-                    delayUT = Planetarium.GetUniversalTime();
+                }
+                else if (EnableStats && !getVessel.Landed && getVessel.IsInStableOrbit())
+                {
+                    if (VectorLoss > 0.01)
+                    {
+                        Message = string.Format(
+                            "Total Vector Loss:\t{0:0.00} m/s\n" +
+                            "Total Loss:\t{1:0.00} m/s\n" +
+                            "Total Burn:\t\t{2:0.0}\n\n",
+                            VectorLoss,
+                            TotalLoss,
+                            TotalBurn
+                            );
+                    }
+                    else
+                        Message = "";
+
+                    Message += string.Format(
+                        "Apoapsis:\t\t{0}\n" +
+                        "Periapsis:\t\t{1}\n" +
+                        "Inclination:\t\t{2:0.0} °\n",
+                        OrbitExtensions.FormatOrbitInfo(getVessel.orbit.ApA, getVessel.orbit.timeToAp),
+                        OrbitExtensions.FormatOrbitInfo(getVessel.orbit.PeA, getVessel.orbit.timeToPe),
+                        getVessel.orbit.inclination
+                        );
+
+                }
+                else if (EnableStats && getVessel.Landed)
+                {
+                    double diffUT = Planetarium.GetUniversalTime() - delayUT;
+                    if (diffUT > 1 || Double.IsNaN(delayUT))
+                    {
+                        vesselState.Update(getVessel);
+                        stagestats.OnFixedUpdate();
+                        stagestats.RequestUpdate(this);
+                        Message = PreflightInfo(getVessel);
+                        delayUT = Planetarium.GetUniversalTime();
+                    }
                 }
             }
         }
@@ -574,6 +578,52 @@ namespace GravityTurn
             {
                 attitude.OnUpdate();
             }
+            else
+                CheckForLaunch();
+        }
+
+
+        const string KEYBINDCFG = "GameData/GravityTurn/PluginData/keybind.cfg";
+        const KeyCode DefaultKeyBind = KeyCode.L;
+        KeyCode keyBind = DefaultKeyBind;
+        public void LoadKeybind()
+        {
+            string path = KSPUtil.ApplicationRootPath + KEYBINDCFG;
+            if (System.IO.File.Exists(path))
+            {
+                var keybindcfg = ConfigNode.Load(path);
+                ConfigNode node = keybindcfg.GetNode("GRAVITYTURN");
+
+                if (node.HasValue("keycode"))
+                {
+                    var keycode = SafeLoad(node.GetValue("keycode"), DefaultKeyBind.ToString());
+                    keyBind = setActiveKeycode(keycode);
+                }
+            }
+        }
+        static string SafeLoad(string value, string oldvalue)
+        {
+            if (value == null)
+                return oldvalue;
+            return value;
+        }
+
+        public KeyCode setActiveKeycode(string keycode)
+        {
+            var activeKeycode = (KeyCode)Enum.Parse(typeof(KeyCode), keycode);
+            if (activeKeycode == KeyCode.None)
+            {
+                activeKeycode = DefaultKeyBind;
+            }
+
+            return activeKeycode;
+        }
+
+
+        void CheckForLaunch()
+        {
+            if (FlightGlobals.ActiveVessel.Landed && mainWindow.WindowVisible && Input.GetKeyDown(keyBind))
+                Launch();
         }
 
         private float MaxAngle(Vessel vessel)
@@ -724,6 +774,8 @@ namespace GravityTurn
                     s.mainThrottle = Calculations.APThrottle(vessel.orbit.timeToAp, this);
                 else
                     s.mainThrottle = 0;
+                Log("mainThrottle: " + s.mainThrottle + ", FlightInputHandler.state.mainThrottle: " + FlightInputHandler.state.mainThrottle);
+                FlightInputHandler.state.mainThrottle = s.mainThrottle;
                 if (program == AscentProgram.InInitialPitch && PitchSet)
                 {
                     if (vessel.ProgradePitch() + 90 >= TurnAngle - 0.1)

@@ -1,5 +1,15 @@
 Changelog
 
+1.8.1.7
+	Fixed creating extra PluginData directories under the Plugin directory
+
+1.8.1.6
+	Added support for ThrottleLimitExtended
+	Added keybinding, letter L will launch even if game UI is hidden.  Key can be changed by editing a file:  GravityTurn/PluginData/keybind.cfg
+	Added code to disable mod above atmosphere
+	Renamed DLL for better CKAN compatibility
+	Optimized InverseStageDecouplesActiveOrIdleEngineOrTank to reduce number of key access, also should solve the KeyNotFound errors
+
 1.8.1.5
 	Thanks to github user @MacGyverNL for these:
 		Guard reading rcsThrustAvailable with a null-check
