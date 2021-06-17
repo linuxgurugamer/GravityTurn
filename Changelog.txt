@@ -1,5 +1,12 @@
 Changelog
 
+1.8.1.8 
+	Added option to use keybind or not
+	Removed keybind.cfg
+	Now always rewrites the keybind.cfg file to make sure both settings are there
+	Added button to clear the cache directory on the Settings page
+
+	
 1.8.1.7
 	Fixed creating extra PluginData directories under the Plugin directory
 

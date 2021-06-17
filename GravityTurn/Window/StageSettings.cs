@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace GravityTurn.Window
             : base(turner, WindowID)
         {
             helpWindow = inhelpWindow;
-            WindowTitle = "GravityTurn Stage Settings";
+            WindowTitle = "GravityTurn Stage & Cache Settings";
             windowPos.width = 300;
         }
         public void InitPos()
@@ -55,6 +56,23 @@ namespace GravityTurn.Window
             turner.autostageLimit.locked = GuiUtils.LockToggle(turner.autostageLimit.locked);
             helpWindow.Button("Stop at this stage number");
             GUILayout.EndHorizontal();
+
+            GUILayout.Space(10);
+            if (GUILayout.Button("Clear Cache", GUILayout.Width(90)))
+            {
+                // Need to clear the cache directory
+                // gt_launchdb*
+                // gt_vessel*
+
+                foreach (string f in Directory.EnumerateFiles(LaunchDB.GetBaseFilePath(this.GetType(), ""), "gt_vessel_*"))
+                {
+                    File.Delete(f);
+                }
+                foreach (string f in Directory.EnumerateFiles(LaunchDB.GetBaseFilePath(this.GetType(),""), "gt_launchdb"))
+                {
+                    File.Delete(f);
+                }
+            }
             GUILayout.EndVertical();
             GUI.DragWindow();
         }

@@ -584,7 +584,12 @@ namespace GravityTurn
 
 
         const string KEYBINDCFG = "GameData/GravityTurn/PluginData/keybind.cfg";
+        const string NODENAME = "GRAVITYTURN";
+        const string KEYCODE = "keycode";
+        const string USEKEYBIND = "useKeyBind";
+
         const KeyCode DefaultKeyBind = KeyCode.L;
+        bool useKeyBind = true;
         KeyCode keyBind = DefaultKeyBind;
         public void LoadKeybind()
         {
@@ -592,20 +597,44 @@ namespace GravityTurn
             if (System.IO.File.Exists(path))
             {
                 var keybindcfg = ConfigNode.Load(path);
-                ConfigNode node = keybindcfg.GetNode("GRAVITYTURN");
+                ConfigNode node = keybindcfg.GetNode(NODENAME);
 
-                if (node.HasValue("keycode"))
+                if (node.HasValue(KEYCODE))
                 {
-                    var keycode = SafeLoad(node.GetValue("keycode"), DefaultKeyBind.ToString());
+                    var keycode = SafeLoad(node.GetValue(KEYCODE), DefaultKeyBind.ToString());
                     keyBind = setActiveKeycode(keycode);
                 }
+                if (node.HasValue(USEKEYBIND))
+                {
+                    useKeyBind = SafeLoad(node.GetValue(USEKEYBIND), useKeyBind);
+                }
             }
+
+            // Write it out in case one or both were missing
+            {
+                ConfigNode file = new ConfigNode();
+                ConfigNode node = new ConfigNode(NODENAME);
+                node.AddValue(KEYCODE, DefaultKeyBind.ToString());
+                node.AddValue(USEKEYBIND, useKeyBind);
+
+                file.AddNode(node);
+                file.Save(path);
+            }
+
         }
+
+
         static string SafeLoad(string value, string oldvalue)
         {
             if (value == null)
                 return oldvalue;
             return value;
+        }
+        static bool SafeLoad(string value, bool oldvalue)
+        {
+            if (value == null)
+                return oldvalue;
+            return bool.Parse(value);
         }
 
         public KeyCode setActiveKeycode(string keycode)
@@ -622,7 +651,7 @@ namespace GravityTurn
 
         void CheckForLaunch()
         {
-            if (FlightGlobals.ActiveVessel.Landed && mainWindow.WindowVisible && Input.GetKeyDown(keyBind))
+            if (FlightGlobals.ActiveVessel.Landed && mainWindow.WindowVisible && (useKeyBind &&  Input.GetKeyDown(keyBind)))
                 Launch();
         }
 
