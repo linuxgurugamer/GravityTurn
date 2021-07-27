@@ -1,5 +1,9 @@
 Changelog
 
+1.8.1.9
+	Added AssemblyFileVersion
+	Updated version file for 1.12
+
 1.8.1.8 
 	Added option to use keybind or not
 	Removed keybind.cfg
