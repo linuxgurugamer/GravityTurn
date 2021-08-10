@@ -59,7 +59,7 @@ namespace GravityTurn.Window
 
             GUILayout.Space(10);
             GUILayout.BeginHorizontal();
-            #
+            
             if (GUILayout.Button("Clear Cache", GUILayout.Width(90)))
             {
                 // Need to clear the cache directory
