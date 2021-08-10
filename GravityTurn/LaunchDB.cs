@@ -104,6 +104,11 @@ namespace GravityTurn
             return DB.Count == 0;
         }
 
+        public void ClearDB()
+        {
+            DB.Clear();
+        }
+
         ///<summary>
         ///Get the least aggressive result from launches that overheated.
         ///</summary>

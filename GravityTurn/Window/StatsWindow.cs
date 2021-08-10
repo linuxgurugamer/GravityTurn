@@ -42,7 +42,7 @@ namespace GravityTurn.Window
             if (GravityTurner.DebugShow)
             {
                 GUILayout.BeginVertical();
-                GUILayout.Label(GravityTurner.DebugMessage, GUILayout.Width(300), GUILayout.Height(350));
+                GUILayout.Label(GravityTurner.DebugMessage, GUILayout.Width(250), GUILayout.Height(350));
                 GUILayout.EndVertical();
             }
             GUI.DragWindow();

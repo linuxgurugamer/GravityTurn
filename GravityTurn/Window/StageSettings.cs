@@ -58,6 +58,8 @@ namespace GravityTurn.Window
             GUILayout.EndHorizontal();
 
             GUILayout.Space(10);
+            GUILayout.BeginHorizontal();
+            #
             if (GUILayout.Button("Clear Cache", GUILayout.Width(90)))
             {
                 // Need to clear the cache directory
@@ -68,11 +70,27 @@ namespace GravityTurn.Window
                 {
                     File.Delete(f);
                 }
-                foreach (string f in Directory.EnumerateFiles(LaunchDB.GetBaseFilePath(this.GetType(),""), "gt_launchdb"))
+                foreach (string f in Directory.EnumerateFiles(LaunchDB.GetBaseFilePath(this.GetType(), ""), "gt_launchdb"))
                 {
                     File.Delete(f);
                 }
             }
+#if false
+            if (!turner.IsLaunchDBEmpty())
+            {
+                if (GUILayout.Button("Reset Guess", GUILayout.ExpandWidth(false)))
+                {
+                    if (File.Exists(GravityTurner.ConfigFilename(GravityTurner.getVessel)))
+                        File.Delete(GravityTurner.ConfigFilename(GravityTurner.getVessel));
+
+                    if (File.Exists(turner.launchdb.GetFilename()))
+                        File.Delete(turner.launchdb.GetFilename());
+                    turner.ClearLaunchDB();
+                }
+            }
+#endif
+            GUILayout.EndHorizontal();
+
             GUILayout.EndVertical();
             GUI.DragWindow();
         }

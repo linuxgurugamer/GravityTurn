@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace GravityTurn.Window
             helpWindow = new HelpWindow(inTurner,inWindowID+1);
             stagesettings = new StageSettings(inTurner, inWindowID + 2, helpWindow);
 
-            windowPos.width = 300;
+            windowPos.width = 250;
             windowPos.height = 100;
             //windowPos.left = Screen.width - (windowPos.width + 40);
             //windowPos.top = 30;
@@ -134,10 +135,8 @@ namespace GravityTurn.Window
         public override void WindowGUI(int windowID)
         {
             base.WindowGUI(windowID);
-            //if (!WindowVisible && turner.button.enabled)
             if (!WindowVisible && turner.toolbarControl.enabled)
             {
-                //turner.button.SetFalse(false);
                 turner.toolbarControl.SetFalse(false);
                 turner.SaveParameters();
             }
@@ -216,9 +215,22 @@ namespace GravityTurn.Window
                 string guess = turner.IsLaunchDBEmpty() ? "First Guess" : "Improve Guess";
                 if (GUILayout.Button(guess, GUILayout.ExpandWidth(false)))
                     turner.CalculateSettings(GravityTurner.getVessel);
-                if (GUILayout.Button("Previous Best Settings", GUILayout.ExpandWidth(false)))
+
+                if (!turner.IsLaunchDBEmpty() && GUILayout.Button("Previous Best", GUILayout.ExpandWidth(false)))
                     turner.CalculateSettings(GravityTurner.getVessel, true);
-                helpWindow.Button("Improve Guess will try to extrapolate the best settings based on previous launches.  This may end in fiery death, but it won't happen the same way twice.  Be warned, sometimes launches get worse before they get better.  But they do get better.");
+
+                if (GUILayout.Button("C", GUILayout.ExpandWidth(false)))
+                {
+                    if (File.Exists(GravityTurner.ConfigFilename(GravityTurner.getVessel)))
+                        File.Delete(GravityTurner.ConfigFilename(GravityTurner.getVessel));
+
+                    if (File.Exists(turner.launchdb.GetFilename()))
+                        File.Delete(turner.launchdb.GetFilename());
+                    turner.ClearLaunchDB();
+                }
+
+
+                helpWindow.Button("Improve Guess will try to extrapolate the best settings based on previous launches.  This may end in fiery death, but it won't happen the same way twice.  Be warned, sometimes launches get worse before they get better.  But they do get better.  To reset, click the <bold>C</bold> button");
                 if (GUILayout.Button(GuiUtils.saveIcon, GUILayout.ExpandWidth(false), GUILayout.MinWidth(18), GUILayout.MinHeight(21)))
                     turner.SaveDefaultParameters();
                 GUILayout.EndHorizontal();

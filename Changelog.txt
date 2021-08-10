@@ -1,5 +1,8 @@
 Changelog
 
+1.8.2
+	Added "C" button to window.  "C" clears the database and deletes the data files assocated with the vessel
+
 1.8.1.9
 	Added AssemblyFileVersion
 	Updated version file for 1.12

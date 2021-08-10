@@ -118,7 +118,7 @@ namespace GravityTurn.Window
                 }
                 else
                     GUI.skin = HighLogic.Skin;
-                windowPos = ClickThruBlocker.GUILayoutWindow(WindowID, windowPos, WindowGUI, WindowTitle, GUILayout.MinWidth(300));
+                windowPos = ClickThruBlocker.GUILayoutWindow(WindowID, windowPos, WindowGUI, WindowTitle, GUILayout.MinWidth(250));
                 //windowPos = GUILayout.Window(WindowID, windowPos, WindowGUI, WindowTitle, GUILayout.MinWidth(300));
             }
         }

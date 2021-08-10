@@ -13,6 +13,9 @@ namespace GravityTurn.Window
             : base(inTurner,inWindowID)
         {
             WindowTitle = "GravityTurn Help";
+            windowPos.left = Screen.width - (windowPos.width + 40);
+            windowPos.top = 30;
+
         }
 
         public void Button(string helpMessage)

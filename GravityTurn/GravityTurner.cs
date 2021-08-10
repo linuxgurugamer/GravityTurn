@@ -22,6 +22,7 @@ namespace GravityTurn
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public class GravityTurner : ReloadableMonoBehaviour
     {
+        static GravityTurner instance;
         public enum AscentProgram
         {
             Landed,
@@ -130,13 +131,17 @@ namespace GravityTurn
         public StageController stage;
         StageStats stagestats = null;
         MechjebWrapper mucore = new MechjebWrapper();
-        LaunchDB launchdb = null;
+        internal LaunchDB launchdb = null;
         static int previousTimeWarp = 0;
         static public double inclinationHeadingCorrectionSpeed = 0;
 
         public bool IsLaunchDBEmpty()
         {
             return launchdb.IsEmpty();
+        }
+        public void ClearLaunchDB()
+        {
+            launchdb.ClearDB();
         }
 
         internal class EnginePlate
@@ -205,10 +210,10 @@ namespace GravityTurn
             string name = vessel.mainBody.name.Replace('"', '_');
             return LaunchDB.GetBaseFilePath(this.GetType(), string.Format("gt_vessel_default_{0}.cfg", name));
         }
-        string ConfigFilename(Vessel vessel)
+        internal static string ConfigFilename(Vessel vessel)
         {
             string name = vessel.mainBody.name.Replace('"', '_');
-            return LaunchDB.GetBaseFilePath(this.GetType(), string.Format("gt_vessel_{0}_{1}.cfg", vessel.id.ToString(), name));
+            return LaunchDB.GetBaseFilePath(instance.GetType(), string.Format("gt_vessel_{0}_{1}.cfg", vessel.id.ToString(), name));
         }
 
         private void OnGUI()
@@ -242,6 +247,7 @@ namespace GravityTurn
 
         void Start()
         {
+            instance = this;
             Log("Starting");
             try
             {
