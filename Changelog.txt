@@ -1,7 +1,12 @@
 Changelog
 
+1.8.2.1
+	Restored window width to 275px
+	Changed item label width from floating with to 150 fixed width
+
 1.8.2
 	Added "C" button to window.  "C" clears the database and deletes the data files assocated with the vessel
+	Reduced window width from 300 to 250 px
 
 1.8.1.9
 	Added AssemblyFileVersion

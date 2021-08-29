@@ -59,7 +59,8 @@ namespace GravityTurn.Window
 
         protected void ItemLabel(string labelText)
         {
-            GUILayout.Label(labelText, GUILayout.ExpandWidth(false), GUILayout.Width(windowPos.width / 2));
+            //GUILayout.Label(labelText, GUILayout.ExpandWidth(false), GUILayout.Width(windowPos.width / 2));
+            GUILayout.Label(labelText, GUILayout.ExpandWidth(false), GUILayout.Width(150));
         }
 
         public BaseWindow(GravityTurner turner, int inWindowID)
@@ -118,7 +119,7 @@ namespace GravityTurn.Window
                 }
                 else
                     GUI.skin = HighLogic.Skin;
-                windowPos = ClickThruBlocker.GUILayoutWindow(WindowID, windowPos, WindowGUI, WindowTitle, GUILayout.MinWidth(250));
+                windowPos = ClickThruBlocker.GUILayoutWindow(WindowID, windowPos, WindowGUI, WindowTitle, GUILayout.MinWidth(275));
                 //windowPos = GUILayout.Window(WindowID, windowPos, WindowGUI, WindowTitle, GUILayout.MinWidth(300));
             }
         }
