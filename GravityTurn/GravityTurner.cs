@@ -277,6 +277,9 @@ namespace GravityTurn
                     h = Math.Max(h, FlightGlobals.ActiveVessel.mainBody.atmosphereDepth + 10000f);
                     DestinationHeight = new EditableValue(h, locked: true) / 1000;
                 }
+
+                delayUT = double.NaN;
+
                 GameEvents.onShowUI.Add(ShowGUI);
                 GameEvents.onHideUI.Add(HideGUI);
 
@@ -563,16 +566,19 @@ namespace GravityTurn
                         );
 
                 }
-                else if (EnableStats && getVessel.Landed)
+                else
                 {
-                    double diffUT = Planetarium.GetUniversalTime() - delayUT;
-                    if (diffUT > 1 || Double.IsNaN(delayUT))
+                    if (EnableStats && getVessel.Landed)
                     {
-                        vesselState.Update(getVessel);
-                        stagestats.OnFixedUpdate();
-                        stagestats.RequestUpdate(this);
-                        Message = PreflightInfo(getVessel);
-                        delayUT = Planetarium.GetUniversalTime();
+                        double diffUT = Planetarium.GetUniversalTime() - delayUT;
+                        if (diffUT > 1 || Double.IsNaN(delayUT))
+                        {
+                            vesselState.Update(getVessel);
+                            stagestats.OnFixedUpdate();
+                            stagestats.RequestUpdate(this);
+                            Message = PreflightInfo(getVessel);
+                            delayUT = Planetarium.GetUniversalTime();
+                        }
                     }
                 }
             }

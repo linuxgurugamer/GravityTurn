@@ -1,5 +1,8 @@
 Changelog
 
+1.8.2.2
+	Fixed Stats window delaying showing the stats after a revert
+
 1.8.2.1
 	Restored window width to 275px
 	Changed item label width from floating with to 150 fixed width
