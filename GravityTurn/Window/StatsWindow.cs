@@ -1,3 +1,4 @@
+using KSP.Localization;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,12 +9,17 @@ namespace GravityTurn.Window
     public class StatsWindow: BaseWindow
     {
         bool initted = false;
+        string biggestlineTxt;
+        string biggestlineValue;
+        float biggerlineTxtSize = 0;
+        float biggerlineValueSize = 0;
+
         public StatsWindow(GravityTurner turner, int WindowID)
             : base(turner, WindowID)
         {
-            WindowTitle = "GravityTurn Statistics Window";
+            WindowTitle = Localizer.Format("#autoLOC_GT_StatsWindowTitle"); // GravityTurn Statistics Window
             windowPos.height = 200;
-            windowPos.width = 310;
+            windowPos.width = 100;
         }
 
         public void InitPos()
@@ -31,10 +37,31 @@ namespace GravityTurn.Window
         public override void WindowGUI(int windowID)
         {
             base.WindowGUI(windowID);
-            
+
             GUILayout.BeginVertical();
-            GUILayout.Label(turner.Message, GUILayout.Width(300), GUILayout.Height(250));
+
+            if (turner.locStatStrList != null)
+            {
+                biggestlineTxt = turner.BiggestStr(turner.locStatStrList);
+                biggestlineValue = "9999.00 t";
+                if (turner.Launching)
+                    biggestlineValue = "9999.00 -> 9999.00 m/s @AP";
+                biggerlineTxtSize = TxtWidth(biggestlineTxt);
+                biggerlineValueSize = TxtWidth(biggestlineValue);
+
+                windowPos.width = biggerlineTxtSize + biggerlineValueSize;
+
+                for (int i = 0; i < turner.locStatStrList.Count; i++)
+                {
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label(turner.locStatStrList[i][0], GUILayout.Width(biggerlineTxtSize));
+                    GUILayout.Label(turner.locStatStrList[i][1], GUILayout.Width(biggerlineValueSize));
+                    GUILayout.EndHorizontal();
+                    GUILayout.ExpandHeight(true);
+                }
+            }
             GUILayout.EndVertical();
+
             if (GameSettings.MODIFIER_KEY.GetKeyDown() && !GravityTurner.DebugShow)
             {
                 GravityTurner.DebugShow = true;
