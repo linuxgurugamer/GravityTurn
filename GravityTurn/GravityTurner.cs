@@ -7,6 +7,7 @@ using KSP.UI.Screens;
 using KramaxReloadExtensions;
 using ToolbarControl_NS;
 using System.Linq;
+using KSP.Localization;
 
 namespace GravityTurn
 {
@@ -17,6 +18,12 @@ namespace GravityTurn
         {
             ToolbarControl.RegisterMod(GravityTurner.MODID, GravityTurner.MODNAME);
         }
+    }
+
+    public class StringInList
+    {
+        public int Size { get; set; }
+        public int Index { get; set; }
     }
 
     [KSPAddon(KSPAddon.Startup.Flight, false)]
@@ -104,6 +111,25 @@ namespace GravityTurn
         public Window.FlightMapWindow flightMapWindow;
         public Window.StatsWindow statsWindow;
         public string Message = "";
+
+        public List<string[]> locStatStrList;
+        //public string biggestLocStr;
+        public string BiggestStr(List<string[]> list)
+        {
+            List<StringInList> charList = new List<StringInList>();
+            int index = 0;
+            foreach (string[] strArray in list)
+            {
+                charList.Add(new StringInList() { Size = strArray[0].Length, Index = index });
+                index++;
+            }
+            charList.Sort(delegate (StringInList x, StringInList y) { return x.Size.CompareTo(y.Size); });
+            charList.Reverse();
+            string biggestStr = list[charList[0].Index][0];
+
+            return biggestStr;
+        }
+
         static public string DebugMessage = "";
         static public bool DebugShow = false;
 
@@ -904,16 +930,56 @@ namespace GravityTurn
 
         string PreflightInfo(Vessel vessel)
         {
-            string info = "";
-            info += string.Format("Surface TWR:\t{0:0.00}\n", TWRWeightedAverage(2 * vessel.mainBody.GeeASL * DestinationHeight, vessel));
-            info += string.Format("Mass:\t\t{0:0.00} t\n", vesselState.mass);
-            info += string.Format("Height:\t\t{0:0.0} m\n", vesselState.vesselHeight);
-            info += "\n";
-            info += string.Format("Drag area:\t\t{0:0.00}\n", vesselState.areaDrag);
-            info += string.Format("Drag coefficient:\t{0:0.00}\n", vesselState.dragCoef);
-            info += string.Format("Drag coefficient fwd:\t{0:0.00}\n", vessel.DragCubeCoefForward());
+            //List to compare text width and display each stat with same way
+            locStatStrList = new List<string[]>();
+
+            string localizedStatsTWR = Localizer.Format("#autoLOC_GT_StatsTWR"); // Surface TWR:
+            string statsTWRValue = string.Format("{0:0.00}", TWRWeightedAverage(2 * vessel.mainBody.GeeASL * DestinationHeight, vessel));
+            string[] statsTWRArray = new string[2] { localizedStatsTWR, statsTWRValue };
+            locStatStrList.Add(statsTWRArray);
+
+            string localizedStatsMass = Localizer.Format("#autoLOC_GT_StatsMass"); // Mass:
+            string statsMassValue = string.Format("{0:0.00} t", vesselState.mass);
+            string[] statsMassArray = new string[2] { localizedStatsMass, statsMassValue };
+            locStatStrList.Add(statsMassArray);
+
+            string localizedStatsHeight = Localizer.Format("#autoLOC_GT_StatsHeight"); // Height:
+            string statsHeightValue = string.Format("{0:0.0} m\n", vesselState.vesselHeight);
+            string[] statsHeightArray = new string[2] { localizedStatsHeight, statsHeightValue };
+            locStatStrList.Add(statsHeightArray);
+
+            string localizedStatsDragArea = Localizer.Format("#autoLOC_GT_StatsDragArea"); // Drag area:
+            string statsDragAreaValue = string.Format("{0:0.00}", vesselState.areaDrag);
+            string[] statsDragAreaArray = new string[2] { localizedStatsDragArea, statsDragAreaValue };
+            locStatStrList.Add(statsDragAreaArray);
+
+            string localizedStatsDragCoef = Localizer.Format("#autoLOC_GT_StatsDragCoef"); // Drag coefficient:
+            string statsDragCoefValue = string.Format("{0:0.00}", vesselState.dragCoef);
+            string[] statsDragCoefArray = new string[2] { localizedStatsDragCoef, statsDragCoefValue };
+            locStatStrList.Add(statsDragCoefArray);
+
+            string localizedStatsDragCoefFwd = Localizer.Format("#autoLOC_GT_StatsDragCoefFwd"); // Drag coefficient fwd:
+            string statsDragCoefFwdValue = string.Format("{0:0.00}", vessel.DragCubeCoefForward());
+            string[] statsDragCoefFwdArray = new string[2] { localizedStatsDragCoefFwd, statsDragCoefFwdValue };
+            locStatStrList.Add(statsDragCoefFwdArray);
+
             DragRatio.value = vesselState.areaDrag / vesselState.mass;
-            info += string.Format("area/mass:\t{0:0.00}\n", DragRatio.value);
+            string localizedStatsAreaMass = Localizer.Format("#autoLOC_GT_StatsAreaMass"); // area/mass:
+            string statsAreaMassValue = string.Format("{0:0.00}", DragRatio.value);
+            string[] statsAreaMassArray = new string[2] { localizedStatsAreaMass, statsAreaMassValue };
+            locStatStrList.Add(statsAreaMassArray);
+
+            // Keep info message for debug
+            string info = "";
+
+            info += localizedStatsTWR + statsTWRValue + "\n";
+            info += localizedStatsMass + statsMassValue + "\n";
+            info += localizedStatsHeight + statsHeightValue + "\n";
+            info += localizedStatsDragArea + statsDragAreaValue + "\n";
+            info += localizedStatsDragCoef + statsDragCoefValue + "\n";
+            info += localizedStatsDragCoefFwd + statsDragCoefFwdValue + "\n";
+            info += localizedStatsAreaMass + statsAreaMassValue;
+
             return info;
         }
 
@@ -941,34 +1007,74 @@ namespace GravityTurn
             if (vessel.CriticalHeatPart().CriticalHeat() > MaxHeat)
                 MaxHeat = vessel.CriticalHeatPart().CriticalHeat();
 
-            Message = string.Format(
-                "Air Drag:\t\t{0:0.00} m/s²\n" +
-                "GravityDrag:\t{1:0.00} m/s²\n" +
-                "Thrust Vector Drag:\t{5:0.00} m/s²\n" +
-                "Air Drag Loss:\t{2:0.00} m/s\n" +
-                "Gravity Drag Loss:\t{3:0.00} -> {4:0.00} m/s @AP\n\n" +
-                "Total Vector Loss:\t{6:0.00} m/s\n" +
-                "Total Loss:\t{7:0.00} m/s\n" +
-                "Total Burn:\t\t{8:0.0}\n\n" +
-                "Apoapsis:\t\t{9}\n" +
-                "Periapsis:\t\t{10}\n" +
-                "Inclination:\t\t{11:0.0} °\n\n" +
-                "Dynamic Pressure:\t{12:0.00} Pa\n" +
-                "Max Q:\t\t{13:0.00} Pa\n\n",
-                vesselState.drag,
-                GravityDrag,
-                DragLoss,
-                GravityDragLoss, GravityDragLossAtAp,
-                VectorDrag,
-                VectorLoss,
-                TotalLoss,
-                TotalBurn,
-                OrbitExtensions.FormatOrbitInfo(vessel.orbit.ApA, vessel.orbit.timeToAp),
-                OrbitExtensions.FormatOrbitInfo(vessel.orbit.PeA, vessel.orbit.timeToPe),
-                vessel.orbit.inclination,
-                vesselState.dynamicPressure,
-                vesselState.maxQ
-                );
+            //List to compare text width and display each stat with same way
+            locStatStrList = new List<string[]>();
+
+            string localizedAirDrag = Localizer.Format("#autoLOC_GT_StatsAirDrag"); // Air Drag:\t\t{0:0.00} m/s²\n
+            string airDragValue = string.Format("{0:0.00} m/s²", vesselState.drag);
+            string[] airDragArray = new string[2] { localizedAirDrag, airDragValue };
+            locStatStrList.Add(airDragArray);
+
+            string localizedGravityDrag = Localizer.Format("#autoLOC_GT_StatsGravityDrag"); // GravityDrag:\t{1:0.00} m/s²\n
+            string gravityDragValue = string.Format("{0:0.00} m/s²", GravityDrag);
+            string[] gravityDragArray = new string[2] { localizedGravityDrag, gravityDragValue };
+            locStatStrList.Add(gravityDragArray);
+
+            string localizedThrustVectorDrag = Localizer.Format("#autoLOC_GT_StatsThrustVectorDrag"); // Thrust Vector Drag:\t{5:0.00} m/s²\n
+            string thrustVectorDragValue = string.Format("{0:0.00} m/s²", VectorDrag);
+            string[] thrustVectorDragArray = new string[2] { localizedThrustVectorDrag, thrustVectorDragValue };
+            locStatStrList.Add(thrustVectorDragArray);
+
+            string localizedAirDragLoss = Localizer.Format("#autoLOC_GT_StatsAirDragLoss"); // Air Drag Loss:\t{2:0.00} m/s\n
+            string airDragLossValue = string.Format("{0:0.00} m/s", DragLoss);
+            string[] airDragLossArray = new string[2] { localizedAirDragLoss, airDragLossValue };
+            locStatStrList.Add(airDragLossArray);
+
+            string localizedGravityDragLoss = Localizer.Format("#autoLOC_GT_StatsGravityDragLoss"); // Gravity Drag Loss:\t{3:0.00} -> {4:0.00} m/s @AP\n\n
+            string localizedAtAP = Localizer.Format("#autoLOC_GT_StatsAtAP"); // @AP
+            string gravityDragLossValue = string.Format("{0:0.00} -> {1:0.00} m/s {2}\n", GravityDragLoss, GravityDragLossAtAp, localizedAtAP);
+            string[] gravityDragLossArray = new string[2] { localizedGravityDragLoss, gravityDragLossValue };
+            locStatStrList.Add(gravityDragLossArray);
+
+            string localizedTotalVectorLoss = Localizer.Format("#autoLOC_GT_StatsTotalVectorLoss"); // Total Vector Loss:\t{6:0.00} m/s\n
+            string totalVectorLossValue = string.Format("{0:0.00} m/s", VectorLoss);
+            string[] totalVectorLossArray = new string[2] { localizedTotalVectorLoss, totalVectorLossValue };
+            locStatStrList.Add(totalVectorLossArray);
+
+            string localizedTotalLoss = Localizer.Format("#autoLOC_GT_StatsTotalLoss"); // Total Loss:\t{7:0.00} m/s\n
+            string totalLossValue = string.Format("{0:0.00} m/s", TotalLoss);
+            string[] totalLossArray = new string[2] { localizedTotalLoss, totalLossValue };
+            locStatStrList.Add(totalLossArray);
+
+            string localizedTotalBurn = Localizer.Format("#autoLOC_GT_StatsTotalBurn"); // Total Burn:\t\t{8:0.0}\n\n
+            string totalBurnValue = string.Format("{0:0.00} m/s\n", TotalBurn);
+            string[] totalBurnArray = new string[2] { localizedTotalBurn, totalBurnValue };
+            locStatStrList.Add(totalBurnArray);
+
+            string localizedApoapsis = Localizer.Format("#autoLOC_GT_StatsApoapsis"); // Apoapsis:\t\t{9}\n
+            string apoapsisValue = string.Format("{0}", OrbitExtensions.FormatOrbitInfo(vessel.orbit.ApA, vessel.orbit.timeToAp));
+            string[] apoapsisArray = new string[2] { localizedApoapsis, apoapsisValue };
+            locStatStrList.Add(apoapsisArray);
+
+            string localizedPeriapsis = Localizer.Format("#autoLOC_GT_StatsPeriapsis"); // Periapsis:\t\t{10}\n
+            string periapsisValue = string.Format("{0}", OrbitExtensions.FormatOrbitInfo(vessel.orbit.PeA, vessel.orbit.timeToPe));
+            string[] periapsisArray = new string[2] { localizedPeriapsis, periapsisValue };
+            locStatStrList.Add(periapsisArray);
+
+            string localizedInclination = Localizer.Format("#autoLOC_GT_StatsInclination"); // Inclination:\t\t{11:0.0} °\n\n
+            string inclinationValue = string.Format("{0:0.0} °\n", vessel.orbit.inclination);
+            string[] inclinationArray = new string[2] { localizedInclination, inclinationValue };
+            locStatStrList.Add(inclinationArray);
+
+            string localizedDynamicPressure = Localizer.Format("#autoLOC_GT_StatsDynamicPressure"); // Dynamic Pressure:\t{12:0.00} Pa\n
+            string dynamicPressureValue = string.Format("{0:0.0} Pa", vesselState.dynamicPressure);
+            string[] dynamicPressureArray = new string[2] { localizedDynamicPressure, dynamicPressureValue };
+            locStatStrList.Add(dynamicPressureArray);
+
+            string localizedMaxQ = Localizer.Format("#autoLOC_GT_StatsMaxQ"); // Max Q:\t\t{13:0.00} Pa\n\n
+            string maxQValue = string.Format("{0:0.0} Pa", vesselState.maxQ);
+            string[] maxQArray = new string[2] { localizedMaxQ, maxQValue };
+            locStatStrList.Add(maxQArray);
         }
 
         void LoadParameters()

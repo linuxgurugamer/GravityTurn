@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using KSP.Localization;
 
 namespace GravityTurn.Window
 {
@@ -14,7 +15,7 @@ namespace GravityTurn.Window
             : base(turner, WindowID)
         {
             helpWindow = inhelpWindow;
-            WindowTitle = "GravityTurn Stage & Cache Settings";
+            WindowTitle = Localizer.Format("#autoLOC_GT_StageSettingsTitle"); // GravityTurn Stage & Cache Settings
             windowPos.width = 300;
         }
         public void InitPos()
@@ -33,34 +34,35 @@ namespace GravityTurn.Window
             base.WindowGUI(windowID);
             GUILayout.BeginVertical();
             GUILayout.BeginHorizontal();
-            ItemLabel("Fairing Pressure");
+            ItemLabel(Localizer.Format("#autoLOC_GT_FairingPressure")); // Fairing Pressure
             turner.FairingPressure.setValue(GUILayout.TextField(string.Format("{0:0}", turner.FairingPressure), GUILayout.Width(60)));
             turner.FairingPressure.locked = GuiUtils.LockToggle(turner.FairingPressure.locked);
-            helpWindow.Button("Dynamic pressure where we pop the procedural fairings.  Higher values will pop lower in the atmosphere, which saves weight, but can cause overheating.  Fairings are heavy, so it's definitely a good idea to pop them as soon as possible.");
+            helpWindow.Button(Localizer.Format("#autoLOC_GT_FairingPressureHelp")); // Dynamic pressure where we pop the procedural fairings.  Higher values will pop lower in the atmosphere, which saves weight, but can cause overheating.  Fairings are heavy, so it's definitely a good idea to pop them as soon as possible.
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
-            ItemLabel("Stage Post Delay");
+            ItemLabel(Localizer.Format("#autoLOC_GT_StagePostDelay")); // Stage Post Delay
             turner.autostagePostDelay.setValue(GUILayout.TextField(string.Format("{0:0}", turner.autostagePostDelay), GUILayout.Width(60)));
             turner.autostagePostDelay.locked = GuiUtils.LockToggle(turner.autostagePostDelay.locked);
-            helpWindow.Button("Delay after a stage event before we consider the next stage.");
+            helpWindow.Button(Localizer.Format("#autoLOC_GT_StagePostDelayHelp")); // Delay after a stage event before we consider the next stage.
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
-            ItemLabel("Stage Pre Delay");
+            ItemLabel(Localizer.Format("#autoLOC_GT_StagePreDelay")); // Stage Pre Delay
             turner.autostagePreDelay.setValue(GUILayout.TextField(string.Format("{0:0}", turner.autostagePreDelay), GUILayout.Width(60)));
             turner.autostagePreDelay.locked = GuiUtils.LockToggle(turner.autostagePreDelay.locked);
-            helpWindow.Button("Delay after running out of fuel before we activate the next stage.");
+            helpWindow.Button(Localizer.Format("#autoLOC_GT_StagePreDelayHelp")); // Delay after running out of fuel before we activate the next stage.
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
-            ItemLabel("Stage Limit");
+            ItemLabel(Localizer.Format("#autoLOC_GT_StageLimit")); // Stage Limit
             turner.autostageLimit.setValue(GUILayout.TextField(string.Format("{0:0}", turner.autostageLimit), GUILayout.Width(60)));
             turner.autostageLimit.locked = GuiUtils.LockToggle(turner.autostageLimit.locked);
-            helpWindow.Button("Stop at this stage number");
+            helpWindow.Button(Localizer.Format("#autoLOC_GT_StageLimitHelp")); // Stop at this stage number
             GUILayout.EndHorizontal();
 
             GUILayout.Space(10);
             GUILayout.BeginHorizontal();
-            
-            if (GUILayout.Button("Clear Cache", GUILayout.Width(90)))
+
+            //if (GUILayout.Button(Localizer.Format("#autoLOC_GT_ClearCacheButton"), GUILayout.Width(90))) // Clear Cache
+            if (GUILayout.Button(Localizer.Format("#autoLOC_GT_ClearCacheButton")))
             {
                 // Need to clear the cache directory
                 // gt_launchdb*

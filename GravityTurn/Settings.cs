@@ -20,13 +20,13 @@ namespace GravityTurn
         public override bool HasPresets { get { return false; } }
 
 
-        [GameParameters.CustomParameterUI("Use compact skin")]
+        [GameParameters.CustomParameterUI("#autoLOC_GT_UseCompactSkin")] // Use compact skin
         public bool useCompact = true;
 
-        [GameParameters.CustomParameterUI("Use regular skin")]
+        [GameParameters.CustomParameterUI("#autoLOC_GT_UseRegularSkin")] // Use regular skin
         public bool useNormal = false;
 
-        [GameParameters.CustomParameterUI("Use stock skin")]
+        [GameParameters.CustomParameterUI("#autoLOC_GT_UseStockSkin")] // Use stock skin
         public bool useStock = false;
 
         bool lastUseCompact;
