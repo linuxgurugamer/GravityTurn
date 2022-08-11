@@ -1,5 +1,19 @@
 Changelog
 
+1.8.2.3 (unreleased)
+	Thanks for github user @Vandest1 for the following:
+		UI :
+			Fix issue on stats display with stock skin (display started over the window title)
+			Fix issue with the bold C in help window
+			Fix issue with tick boxes text with stock skin on main window
+			Fix help window position
+			Change help window width
+		Localization:
+			Add localization support
+			Change manner stats are display to fix alignment with different languages (different words width)
+			Auto adapt window and fields width to match with all languages
+			Add french localization
+
 1.8.2.2
 	Fixed Stats window delaying showing the stats after a revert
 
