@@ -1,6 +1,6 @@
 Changelog
 
-1.8.2.3 (unreleased)
+1.8.2.3 
 	Thanks for github user @Vandest1 for the following:
 		UI :
 			Fix issue on stats display with stock skin (display started over the window title)
