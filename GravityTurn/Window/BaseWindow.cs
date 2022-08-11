@@ -56,11 +56,26 @@ namespace GravityTurn.Window
         [Persistent]
         public PersistentWindow windowPos = new PersistentWindow();
 
+        // Get width of a displayed string
+        public float TxtWidth(string txt)
+        {
+            float txtWidth;
+            GUIContent content = new GUIContent(txt);
+            txtWidth = GUI.skin.textField.CalcSize(content).x;
+
+            return txtWidth;
+        }
 
         protected void ItemLabel(string labelText)
         {
             //GUILayout.Label(labelText, GUILayout.ExpandWidth(false), GUILayout.Width(windowPos.width / 2));
-            GUILayout.Label(labelText, GUILayout.ExpandWidth(false), GUILayout.Width(150));
+            float itemLabelWidth = 150;
+
+            // Calcul for Stock Skin
+            if (HighLogic.CurrentGame.Parameters.CustomParams<GT>().useStock)
+                itemLabelWidth = GravityTurner.mainWindow.mainWindowBiggerLineWidth - GravityTurner.mainWindow.inputTextField + 5;
+            
+            GUILayout.Label(labelText, GUILayout.ExpandWidth(false), GUILayout.Width(itemLabelWidth));
         }
 
         public BaseWindow(GravityTurner turner, int inWindowID)
