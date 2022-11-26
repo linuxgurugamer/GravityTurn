@@ -706,7 +706,7 @@ namespace GravityTurn
 
         public string GetFlightMapFilename()
         {
-            return LaunchDB.GetBaseFilePath(this.GetType(), string.Format("gt_vessel_{0}_{1}.png", LaunchName, LaunchBody.name).Replace('/', '_').Replace('\\', '_'));
+            return LaunchDB.GetBaseFilePath(this.GetType(), string.Format("gt_vessel_{0}_{1}.png", LaunchName, LaunchBody.name));
         }
 
         public void Kill()
