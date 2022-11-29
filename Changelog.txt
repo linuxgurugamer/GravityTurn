@@ -1,5 +1,8 @@
 Changelog
 
+1.8.2.4
+	Added code to sanitize the filename based on the vessel name (strips/replaces invalid characters)
+
 1.8.2.3 
 	Thanks for github user @Vandest1 for the following:
 		UI :
