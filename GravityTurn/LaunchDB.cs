@@ -346,7 +346,7 @@ namespace GravityTurn
 
         public static string GetBaseFilePath(Type t, string sub)
         {
-            return System.IO.Directory.GetCurrentDirectory() + @"/GameData/GravityTurn/PluginData/" + KSPUtil.SanitizeFilename(sub);
+            return KSPUtil.ApplicationRootPath + @"/GameData/GravityTurn/PluginData/" + KSPUtil.SanitizeFilename(sub);
         }
     }
 }

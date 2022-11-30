@@ -1,5 +1,8 @@
 Changelog
 
+1.8.2.6
+	Update to make sure correct path is used (possibly broken by new launcher)
+
 1.8.2.5
 	Thanks to github user @telluriumCrystal for this:
 		Fix SanitizeFilename to only do the filename, not the full path
