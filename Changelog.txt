@@ -1,5 +1,11 @@
 Changelog
 
+1.8.3
+	Thanks to github user @rainsdm for this
+		Added zh-cn.cfg (chinese)
+	Fixed memory leak
+	Fixed engine plates not working
+
 1.8.2.6
 	Update to make sure correct path is used (possibly broken by new launcher)
 

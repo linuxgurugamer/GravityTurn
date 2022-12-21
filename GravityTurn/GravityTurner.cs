@@ -197,8 +197,13 @@ namespace GravityTurn
                 {
                     if (p.srfAttachNode != null && attachNode == p.srfAttachNode)
                         continue;
-                    if (attachNode.id == nodeId)
+                    if (attachNode.attachedPart != null && attachNode.id != "top" && attachNode.id != "bottom")
+                    {
+                        UnityEngine.Debug.Log("GravityTurn: GetNode, id: " + attachNode.id);
                         return attachNode;
+                    }
+                    //if (attachNode.id == nodeId)
+                    //    return attachNode;
 
                 }
                 return null;
@@ -1143,6 +1148,10 @@ namespace GravityTurn
             DebugShow = false;
             //windowManager.OnDestroy();
             //ApplicationLauncher.Instance.RemoveModApplication(button);
+
+            GameEvents.onShowUI.Remove(ShowGUI);
+            GameEvents.onHideUI.Remove(HideGUI);
+
             if (toolbarControl != null)
             {
                 toolbarControl.OnDestroy();
