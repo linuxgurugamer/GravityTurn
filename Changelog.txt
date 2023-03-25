@@ -1,5 +1,9 @@
 Changelog
 
+1.8.4
+	Thanks to github user @frankieorabona for this:
+		Added Italian language
+
 1.8.3
 	Thanks to github user @rainsdm for this
 		Added zh-cn.cfg (chinese)
