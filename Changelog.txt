@@ -1,5 +1,8 @@
 Changelog
 
+1.8.4.1
+	Updated version file to use github for new version info
+
 1.8.4
 	Thanks to github user @frankieorabona for this:
 		Added Italian language
