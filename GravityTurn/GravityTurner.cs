@@ -80,6 +80,8 @@ namespace GravityTurn
         [Persistent]
         public EditableValue autostageLimit = new EditableValue(0, "{0:0}");
         [Persistent]
+        public EditableValue useMechjeb = new EditableValue(true);
+        [Persistent]
         public bool EnableStats = false;
 
 
@@ -230,7 +232,7 @@ namespace GravityTurn
                 incomingMessage = format;
             else
                 incomingMessage = string.Format(format, args);
-#if false
+#if   false
             UnityEngine.Debug.Log("GravityTurn: " + incomingMessage);
 #endif
         }

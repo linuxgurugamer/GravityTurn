@@ -1,5 +1,9 @@
 Changelog
 
+1.8.4.2
+	Added option to disable Mechjeb integration
+	Fixed issue with not being able to work with the dev version of Mechjeb
+
 1.8.4.1
 	Updated version file to use github for new version info
 

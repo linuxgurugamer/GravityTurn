@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Reflection;
 //using System.Threading.Tasks;
 using UnityEngine;
-using System.Reflection;
 
 namespace GravityTurn
 {
@@ -16,11 +15,15 @@ namespace GravityTurn
         [Persistent]
         public bool initialized = false;
 
+        [Persistent]
+        public bool boolValue = true;
+
         public bool valid = true;
         public String format = "{0:0.00}";
         public string str = "0";
 
-        public EditableValue(double initialValue,string printFormat="{0:0.00}", bool locked = false)
+
+        public EditableValue(double initialValue, string printFormat = "{0:0.00}", bool locked = false)
         {
             if (!initialized)
             {
@@ -55,6 +58,32 @@ namespace GravityTurn
             }
         }
 
+        public EditableValue(bool initialBool, bool locked = false)
+        {
+            this.locked = locked;
+            if (!initialized)
+            {
+                format = "";
+                initialized = true;
+            }
+            boolValue = initialBool;
+            str = value.ToString();
+            valid = true;
+        }
+
+        public void setValue(bool b)
+        {
+            boolValue = b;
+            str = b.ToString();
+            valid = true;
+        }
+
+        public static implicit operator bool(EditableValue e)
+        {
+            return e.boolValue;
+        }
+
+
         public void setValue(string s)
         {
             try
@@ -69,6 +98,7 @@ namespace GravityTurn
                 valid = false;
             }
         }
+
 
         public override string ToString()
         {
@@ -137,7 +167,7 @@ namespace GravityTurn
                 return MuUtils.ClampDegrees360(angle);
             }
         }
-        
+
         public static float ResourceDensity(int type)
         {
             return PartResourceLibrary.Instance.GetDefinition(type).density;

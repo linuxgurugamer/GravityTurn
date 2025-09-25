@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
 using System.Reflection;
 
 namespace GravityTurn
@@ -68,7 +65,13 @@ namespace GravityTurn
 
         public void ExecuteNode()
         {
+            GravityTurner.Log("MechjebWrapper.ExecuteNode");
+
             var coreNodeInfo = CoreType.GetField("node");
+            // Following added for compatibility with dev version of Mechjeb
+            if (coreNodeInfo == null)
+                coreNodeInfo = CoreType.GetField("Node");
+
             var coreNode = coreNodeInfo.GetValue(core);
             var NodeExecute = coreNode.GetType().GetMethod("ExecuteOneNode", BindingFlags.Public | BindingFlags.Instance);
             NodeExecute.Invoke(coreNode, new object[] { this });
@@ -76,6 +79,7 @@ namespace GravityTurn
 
         public void CircularizeAtAP()
         {
+            GravityTurner.Log("MechjebWrapper.CircularizeAtAP");
             double UT = Planetarium.GetUniversalTime();
             UT += vessel.orbit.timeToAp;
             System.Type OrbitalManeuverCalculatorType = FindMechJebModule("MuMech.OrbitalManeuverCalculator");
