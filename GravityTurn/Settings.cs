@@ -29,7 +29,7 @@ namespace GravityTurn
         [GameParameters.CustomParameterUI("#autoLOC_GT_UseStockSkin")] // Use stock skin
         public bool useStock = false;
 
-        [GameParameters.CustomParameterUI("Use Mechjeb to finish maneuver if available")]
+        [GameParameters.CustomParameterUI("#autoLOC_GT_UseMechjeb")]
         public bool useMechjebIfAvailable = true;
 
         bool lastUseCompact;

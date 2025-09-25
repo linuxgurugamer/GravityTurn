@@ -31,61 +31,46 @@ namespace GravityTurn.Window
             base.WindowGUI(windowID);
             using (new GUILayout.VerticalScope())
             {
-                //GUILayout.BeginVertical();
                 using (new GUILayout.HorizontalScope())
                 {
-                    //GUILayout.BeginHorizontal();
                     ItemLabel(Localizer.Format("#autoLOC_GT_FairingPressure")); // Fairing Pressure
                     turner.FairingPressure.setValue(GUILayout.TextField(string.Format("{0:0}", turner.FairingPressure), GUILayout.Width(60)));
                     turner.FairingPressure.locked = GuiUtils.LockToggle(turner.FairingPressure.locked);
                     helpWindow.Button(Localizer.Format("#autoLOC_GT_FairingPressureHelp")); // Dynamic pressure where we pop the procedural fairings.  Higher values will pop lower in the atmosphere, which saves weight, but can cause overheating.  Fairings are heavy, so it's definitely a good idea to pop them as soon as possible.
-                                                                                            //GUILayout.EndHorizontal();
                 }
                 using (new GUILayout.HorizontalScope())
                 {
-                    //GUILayout.BeginHorizontal();
                     ItemLabel(Localizer.Format("#autoLOC_GT_StagePostDelay")); // Stage Post Delay
                     turner.autostagePostDelay.setValue(GUILayout.TextField(string.Format("{0:0}", turner.autostagePostDelay), GUILayout.Width(60)));
                     turner.autostagePostDelay.locked = GuiUtils.LockToggle(turner.autostagePostDelay.locked);
                     helpWindow.Button(Localizer.Format("#autoLOC_GT_StagePostDelayHelp")); // Delay after a stage event before we consider the next stage.
-                                                                                           //GUILayout.EndHorizontal();
                 }
                 using (new GUILayout.HorizontalScope())
                 {
-                    //GUILayout.BeginHorizontal();
                     ItemLabel(Localizer.Format("#autoLOC_GT_StagePreDelay")); // Stage Pre Delay
                     turner.autostagePreDelay.setValue(GUILayout.TextField(string.Format("{0:0}", turner.autostagePreDelay), GUILayout.Width(60)));
                     turner.autostagePreDelay.locked = GuiUtils.LockToggle(turner.autostagePreDelay.locked);
                     helpWindow.Button(Localizer.Format("#autoLOC_GT_StagePreDelayHelp")); // Delay after running out of fuel before we activate the next stage.
-                                                                                          //GUILayout.EndHorizontal();
 
                 }
                 using (new GUILayout.HorizontalScope())
                 {
-                    //GUILayout.BeginHorizontal();
                     ItemLabel(Localizer.Format("#autoLOC_GT_StageLimit")); // Stage Limit
                     turner.autostageLimit.setValue(GUILayout.TextField(string.Format("{0:0}", turner.autostageLimit), GUILayout.Width(60)));
                     turner.autostageLimit.locked = GuiUtils.LockToggle(turner.autostageLimit.locked);
                     helpWindow.Button(Localizer.Format("#autoLOC_GT_StageLimitHelp")); // Stop at this stage number
-                                                                                       //GUILayout.EndHorizontal();
                 }
                 using (new GUILayout.HorizontalScope())
                 {
-                    //GUILayout.BeginHorizontal();
-                   ItemLabel("Use Mechjeb to finish maneuver if available"); // use Mechjeb
+                   ItemLabel(Localizer.Format("#autoLOC_GT_UseMechjeb")); // use Mechjeb
                     HighLogic.CurrentGame.Parameters.CustomParams<GT>().useMechjebIfAvailable = GUILayout.Toggle((bool)HighLogic.CurrentGame.Parameters.CustomParams<GT>().useMechjebIfAvailable, "", GUILayout.Width(60));
-                    //turner.useMechjeb.setValue(GUILayout.TextField(((bool)turner.useMechjeb).ToString(), GUILayout.Width(60)));
                     turner.useMechjeb.setValue(HighLogic.CurrentGame.Parameters.CustomParams<GT>().useMechjebIfAvailable);
                     GUILayout.Label("(this is a global setting)");
-                    //turner.useMechjeb.locked = GuiUtils.LockToggle(turner.useMechjeb.locked);
-                    //helpWindow.Button(Localizer.Format("#autoLOC_GT_StageLimitHelp")); // Stop at this stage number
-                    //GUILayout.EndHorizontal();
                 }
                 GUILayout.Space(10);
 
                 using (new GUILayout.HorizontalScope())
                 {
-                    //GUILayout.BeginHorizontal();
 
                     //if (GUILayout.Button(Localizer.Format("#autoLOC_GT_ClearCacheButton"), GUILayout.Width(90))) // Clear Cache
                     if (GUILayout.Button(Localizer.Format("#autoLOC_GT_ClearCacheButton")))
@@ -117,9 +102,7 @@ namespace GravityTurn.Window
                 }
             }
 #endif
-                    //GUILayout.EndHorizontal();
                 }
-                //GUILayout.EndVertical();
             }
             GUI.DragWindow();
         }
