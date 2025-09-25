@@ -829,7 +829,7 @@ namespace GravityTurn
                 launchdb.Save();
                 Kill();
                 DebugMessage += "In Circularisation program\n";
-                if (mucore.Initialized)
+                if (mucore.Initialized && HighLogic.CurrentGame.Parameters.CustomParams<GT>().useMechjebIfAvailable)
                 {
                     program = AscentProgram.InCircularisation;
                     mucore.CircularizeAtAP();

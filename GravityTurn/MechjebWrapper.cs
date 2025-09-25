@@ -80,6 +80,7 @@ namespace GravityTurn
         public void CircularizeAtAP()
         {
             GravityTurner.Log("MechjebWrapper.CircularizeAtAP");
+            
             double UT = Planetarium.GetUniversalTime();
             UT += vessel.orbit.timeToAp;
             System.Type OrbitalManeuverCalculatorType = FindMechJebModule("MuMech.OrbitalManeuverCalculator");
